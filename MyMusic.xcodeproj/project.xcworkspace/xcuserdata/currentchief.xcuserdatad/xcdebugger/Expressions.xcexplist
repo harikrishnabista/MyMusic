@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "AlbumDataParser.parseAlbum(data:resp:err:):AlbumDataParser.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "jsonData?.value(forKey: &quot;results&quot;) as? NSDictionary">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AlbumViewController.tableView(_:numberOfRowsInSection:):AlbumViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "album">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in AlbumViewController.downloadAlbumDetail():AlbumViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.album">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
