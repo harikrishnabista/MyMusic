@@ -12,7 +12,7 @@ class Player: NSObject {
     var volume:Float = 0.0
     var isRepeat:Bool = false
     var playList:[Track] = []
-    var nowPlaying:Track
+    var nowPlaying:Track 
     
     init(track:Track) {
         self.nowPlaying = track

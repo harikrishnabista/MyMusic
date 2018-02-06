@@ -8,6 +8,14 @@
 
 import UIKit
 
+class TrackMetaData: Codable {
+    // computed properties
+    var rating:Double = 0.0
+    var playCount:Int = 0
+    var isPlaying:Bool = false
+    var isFavorite:Bool = false
+}
+
 class Track: NSObject, Codable {
     
     var trackId:Int64
@@ -25,17 +33,24 @@ class Track: NSObject, Codable {
     
     var collectionPrice:Double = 0.0
     var trackPrice:Double = 0.0
+    
+    func getTrackPriceLabel() -> String {
+        return "Track: $\(trackPrice)"
+    }
+    
+    func getCollectionPriceLabel() -> String {
+        return "Collection: $\(collectionPrice)"
+    }
+    
     var releaseDate:String = "Unknown"
     var trackTimeMillis:Int64 = 0
     
     var country:String = "Unknown"
     var primaryGenreName:String = "Unknown"
     var isStreamable:Bool = false
-
-    // computed properties
-    var rating:Double?
-    var playCount:Int?
     
+    var metaData:TrackMetaData?
+
     init(id:Int64, name:String) {
         self.trackId = id
         self.trackName = name

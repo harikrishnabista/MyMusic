@@ -55,10 +55,11 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.navigationBar.isHidden = false
+        
     }
     
     @IBAction func btnNavBackTapped(_ sender: Any) {
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.popViewController(animated: true)
     }
     func downloadAlbumDetail() {
@@ -94,7 +95,22 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
+        openPlayerWithTrack(track: nil)
     }
+    
+    func openPlayerWithTrack(track:Track?) {
+        if let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController {
+
+            if let tracks = album.tracks, tracks.count > 0 {
+                let player = Player(track: track == nil ? tracks[0] : track!)
+                player.playList = tracks
+                playerViewController.player = player
+                self.navigationController?.present(playerViewController, animated: true, completion: nil)
+            }
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "TrackTableViewCell", for: indexPath) as! TrackTableViewCell
@@ -105,12 +121,25 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.lblSubSubTitle.text = track.artistName
             
             cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
+            
+//            cell.btnPlay.setValue(indexPath, forKey: "indexPath")
+            cell.btnPlay.tag = indexPath.row
+            cell.btnPlay.addTarget(self, action: #selector(AlbumViewController.btnPlayCellTapped(sender:)), for: .touchUpInside)
         }
-//        if let track = album.tracks![indexPath.row]{
-//            cell.lblTitle.text = track.
-//        }
 
         return cell
+    }
+    
+    @objc func btnPlayCellTapped(sender : UIButton){
+        if let tracks = album.tracks {
+            openPlayerWithTrack(track: tracks[sender.tag])
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let tracks = album.tracks{
+            openPlayerWithTrack(track: tracks[indexPath.row])
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

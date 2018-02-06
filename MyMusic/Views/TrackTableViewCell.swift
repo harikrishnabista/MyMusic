@@ -15,13 +15,16 @@ class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var lblTitle: UILabel!
     @IBOutlet weak var lblSubTitle: UILabel!
     @IBOutlet weak var lblSubSubTitle: UILabel!
+    @IBOutlet weak var btnPlay: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
+    
     override func draw(_ rect: CGRect) {
-        self.viewContainer.layer.borderColor = UIColor.lightText.cgColor
+        self.viewContainer.layer.borderColor = UIColor.white.cgColor
         viewContainer.layer.cornerRadius = 3.0
         viewContainer.layer.borderWidth = 1.0
         

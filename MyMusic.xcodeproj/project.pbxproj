@@ -35,6 +35,7 @@
 		56D9345D2028406900D10A94 /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9345C2028406900D10A94 /* TrackTableViewCell.swift */; };
 		56D9345F2028478100D10A94 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */; };
 		56D9346120284A5D00D10A94 /* AlbumCollectionDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9346020284A5D00D10A94 /* AlbumCollectionDataParser.swift */; };
+		56D9349F202982E500D10A94 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9349E202982E500D10A94 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		56D9345C2028406900D10A94 /* TrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 		56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		56D9346020284A5D00D10A94 /* AlbumCollectionDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionDataParser.swift; sourceTree = "<group>"; };
+		56D9349E202982E500D10A94 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 				56D9343B2027ADF500D10A94 /* RecentlyPlayed.swift */,
 				56D934352027ADA000D10A94 /* Album.swift */,
 				56D9343D2027AE0500D10A94 /* AlbumCollection.swift */,
+				56D9349E202982E500D10A94 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				56D934552028119B00D10A94 /* AlbumDataParser.swift in Sources */,
 				56D934502027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift in Sources */,
 				56D9345F2028478100D10A94 /* AlbumTableViewCell.swift in Sources */,
+				56D9349F202982E500D10A94 /* User.swift in Sources */,
 				56D9342C2027AC9700D10A94 /* HomeViewController.swift in Sources */,
 				56D9343A2027ADDB00D10A94 /* MyMusic.swift in Sources */,
 				56D9342E2027ACE700D10A94 /* MyMusicViewController.swift in Sources */,

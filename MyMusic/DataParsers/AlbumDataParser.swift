@@ -30,7 +30,13 @@ class AlbumDataParser {
                 
                 let tracksData = try JSONSerialization.data(withJSONObject: tracksArr, options: JSONSerialization.WritingOptions.prettyPrinted)
                 
-                return try JSONDecoder().decode([Track].self, from: tracksData)
+                let tracks = try JSONDecoder().decode([Track].self, from: tracksData)
+                
+                for item in tracks{
+                    item.metaData = TrackMetaData()
+                }
+                
+                return tracks
             }
             
             return nil

@@ -8,6 +8,20 @@
 
 import UIKit
 
-class RecentlyPlayed: NSObject {
+class RecentlyPlayed: NSObject, MusicCollection {
     var tracks:[Track] = []
+    
+    func addToList(track: Track) {
+        self.tracks.append(track)
+    }
+    
+    func removeFromList(track: Track) {
+        if let index = self.tracks.index(of: track) {
+            self.tracks.remove(at: index)
+        }
+    }
+    
+    func shuffle() {
+        
+    }
 }
