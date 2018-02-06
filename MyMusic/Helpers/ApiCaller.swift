@@ -14,6 +14,8 @@ class ApiCaller {
             completion(data, resp, err)
         })
         
+//        print("type: \(type(of: task))")
+        
         task.resume()
     }
     

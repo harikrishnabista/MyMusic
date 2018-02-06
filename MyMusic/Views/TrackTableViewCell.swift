@@ -19,6 +19,15 @@ class TrackTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    override func draw(_ rect: CGRect) {
+        self.viewContainer.layer.borderColor = UIColor.lightText.cgColor
+        viewContainer.layer.cornerRadius = 3.0
+        viewContainer.layer.borderWidth = 1.0
+        
+//        self.backgroundColor = UIColor.lightText
+//        self.backgroundView?.backgroundColor = UIColor.lightText
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

@@ -33,7 +33,7 @@ class Track: NSObject, Codable {
     var isStreamable:Bool = false
 
     // computed properties
-//    var rating:Double = 0.0
+    var rating:Double?
     var playCount:Int?
     
     init(id:Int64, name:String) {

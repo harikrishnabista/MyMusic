@@ -9,11 +9,8 @@
 import UIKit
 
 class GlobalCache {
-    
     static let shared = GlobalCache()
-    
     var imageCache:[String:UIImage] = [:]
-    
     private init() {
         
     }

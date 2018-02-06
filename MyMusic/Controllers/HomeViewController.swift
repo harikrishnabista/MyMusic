@@ -83,12 +83,12 @@ class HomeViewController: UIViewController, UIPageViewControllerDataSource {
         return nil
     }
     
-    // segue delegate
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "segueToAlbumViewController", let album = sender as? Album {
-            if let albumViewController = segue.destination as? AlbumViewController {
-                albumViewController.album = album
-            }
-        }
-    }
+//    // segue delegate
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "segueToAlbumViewController", let album = sender as? Album {
+//            if let albumViewController = segue.destination as? AlbumViewController {
+//                albumViewController.album = album
+//            }
+//        }
+//    }
 }

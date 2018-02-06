@@ -22,9 +22,7 @@ class AlbumDataParser {
         
         do{
             let jsonData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary
-            
-//            print(jsonData)
-            
+
             if let tracksArrOfDict = jsonData?.value(forKey: "results") as? [NSDictionary]{
                 
                 var tracksArr = tracksArrOfDict
@@ -33,11 +31,6 @@ class AlbumDataParser {
                 let tracksData = try JSONSerialization.data(withJSONObject: tracksArr, options: JSONSerialization.WritingOptions.prettyPrinted)
                 
                 return try JSONDecoder().decode([Track].self, from: tracksData)
-                
-//                var tracks:[Track] = []
-//                tracks.append(track)
-//                
-//                return tracks
             }
             
             return nil

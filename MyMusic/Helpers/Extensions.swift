@@ -8,7 +8,33 @@
 
 import UIKit
 
+extension UIImageView {
+    func setImageWithUrl(urlStr:String, placeHolderImageName:String) -> URLSessionTask? {
+        
+        self.image = UIImage(named:placeHolderImageName)
+        
+        if let cachaImg = GlobalCache.shared.imageCache[urlStr] {
+            self.image = cachaImg
+            return nil
+        }
+
+        if let url = URL(string:urlStr) {
+            return ApiCaller().getImageFrom(url: url, completion: { (img) in
+                DispatchQueue.main.async {
+                    if let downloadedImage = img {
+                        self.image = downloadedImage
+                        GlobalCache.shared.imageCache[urlStr] = downloadedImage
+                    }
+                }
+            })
+        }
+        
+        return nil
+    }
+}
+
 extension UIView {
+    
     func showLoading(message:String) {
         
         let loadingView = LoadingView(frame: CGRect(x: 0, y: 0, width:0, height: 0));

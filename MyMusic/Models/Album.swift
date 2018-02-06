@@ -31,6 +31,10 @@ class Album: NSObject, Codable {
         super.init()
     }
     
+    func getTotalSongs() -> Int {
+        return self.tracks?.count ?? 0
+    }
+    
     convenience override init() {
         self.init()
     }

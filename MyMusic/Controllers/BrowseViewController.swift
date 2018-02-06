@@ -10,6 +10,8 @@ import UIKit
 
 class BrowseViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    lazy var imageDownloadTasks:[String:URLSessionTask] = [:]
+    
     var albumCollection:AlbumCollection?
     private static let COLL_REUSE_IDENTIFIER = "BrowseItemCollectionViewCell"
 
@@ -25,7 +27,6 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func downloadTopAlbums() {
-        
         guard let url = URL(string: Constants.TOP_ALBUMS_API) else {
             return
         }
@@ -66,35 +67,26 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         cell.lblTitle.text = album.name
-        cell.lblSubTitle.text = album.artistName
+        cell.lblSubTitle.text = "\(album.getTotalSongs()) tracks"
         
-        if let cacheImage = GlobalCache.shared.imageCache[album.artworkUrl100] {
-            DispatchQueue.main.async {
-                cell.imgItem.image = cacheImage
-            }
-        }else{
-            cell.imgItem.image = UIImage(named: "iconMusic")
-            
-            if let imgUrl = URL(string:album.artworkUrl100) {
-                ApiCaller().getImageFrom(url: imgUrl, completion: { (downloadedImage) in
-                    if let downloadedImage = downloadedImage {
-                        DispatchQueue.main.async {
-                            GlobalCache.shared.imageCache[album.artworkUrl100] = downloadedImage
-                            cell.imgItem.image = downloadedImage
-                        }
-                    }
-                })
-            }
+        if let downloadTask = cell.imgItem.setImageWithUrl(urlStr: album.artworkUrl100, placeHolderImageName: "iconMusic") {
+            imageDownloadTasks[album.artworkUrl100] = downloadTask
         }
- 
+        
         return cell
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        // stop and remove all the image downloading tasks
+        for task in self.imageDownloadTasks {
+            task.value.cancel()
+        }
+        self.imageDownloadTasks.removeAll()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let homeViewController = self.parent?.parent as? HomeViewController {
-            if let album = albumCollection?.albums[indexPath.row] {
-                homeViewController.performSegue(withIdentifier: "segueToAlbumViewController", sender: album)
-            }
+        if let album = albumCollection?.albums[indexPath.row] {
+            self.performSegue(withIdentifier: "segueToAlbumDetail", sender: album)
         }
     }
     
@@ -104,6 +96,23 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         let width = collectionView.bounds.size.width - 10
         
         return CGSize(width: width/2, height: width/2)
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // stop the download task if it is still running because we mo more need this image as cell wont be visible
+        if let album = albumCollection?.albums[indexPath.row] {
+            self.imageDownloadTasks[album.artworkUrl100]?.cancel()
+            self.imageDownloadTasks.removeValue(forKey: album.artworkUrl100)
+        }
+    }
+    
+    // segue delegate
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToAlbumDetail", let album = sender as? Album {
+            if let albumViewController = segue.destination as? AlbumViewController {
+                albumViewController.album = album
+            }
+        }
     }
     
 
