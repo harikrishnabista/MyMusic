@@ -22,12 +22,8 @@
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="tyt-Wa-0k3">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="Sm3-Jj-G0A">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8Ai-0l-lzH">
-                                <rect key="frame" x="16" y="7" width="83" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Menu"/>
-                            </button>
+                        <barButtonItem key="leftBarButtonItem" image="iconMenu" id="aZg-Ou-8es">
+                            <color key="tintColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="DmQ-ZV-xlP">
                             <rect key="frame" x="115" y="7" width="145" height="30"/>
@@ -36,11 +32,14 @@
                                 <segment title="My Music"/>
                                 <segment title="Browse"/>
                             </segments>
+                            <color key="tintColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="segControlValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="2CJ-py-Avb"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="search" id="5eb-9K-Ccz"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="search" id="5eb-9K-Ccz">
+                            <color key="tintColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="segControl" destination="DmQ-ZV-xlP" id="y7C-wp-r2N"/>
@@ -96,13 +95,13 @@
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DY5-BN-6OL">
                                                                                 <rect key="frame" x="0.0" y="89" width="160" height="50"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2jY-pK-haK">
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2jY-pK-haK">
                                                                                         <rect key="frame" x="5" y="5.5" width="152" height="18"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKI-wF-2sz">
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CKI-wF-2sz">
                                                                                         <rect key="frame" x="5" y="27.5" width="152" height="16"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -251,7 +250,7 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Browse &amp; add music to your favorites." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lIz-MD-1z1">
-                                <rect key="frame" x="20" y="373" width="335" height="21"/>
+                                <rect key="frame" x="20" y="443" width="335" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <nil key="highlightedColor"/>
@@ -262,7 +261,7 @@
                             <constraint firstItem="lIz-MD-1z1" firstAttribute="leading" secondItem="OVU-aP-abs" secondAttribute="leading" constant="20" id="9wY-sK-vMR"/>
                             <constraint firstItem="43W-mp-4Nv" firstAttribute="leading" secondItem="OVU-aP-abs" secondAttribute="leading" id="Em6-fK-zv4"/>
                             <constraint firstItem="OVU-aP-abs" firstAttribute="trailing" secondItem="lIz-MD-1z1" secondAttribute="trailing" constant="20" id="OhQ-aH-Jcg"/>
-                            <constraint firstItem="lIz-MD-1z1" firstAttribute="centerY" secondItem="K9G-kp-zyn" secondAttribute="centerY" constant="50" id="Os1-J3-h6M"/>
+                            <constraint firstItem="lIz-MD-1z1" firstAttribute="centerY" secondItem="K9G-kp-zyn" secondAttribute="centerY" constant="120" id="Os1-J3-h6M"/>
                             <constraint firstItem="OVU-aP-abs" firstAttribute="bottom" secondItem="43W-mp-4Nv" secondAttribute="bottom" id="hzd-w9-r5T"/>
                             <constraint firstItem="OVU-aP-abs" firstAttribute="trailing" secondItem="43W-mp-4Nv" secondAttribute="trailing" id="nOU-vE-EFM"/>
                             <constraint firstItem="43W-mp-4Nv" firstAttribute="top" secondItem="OVU-aP-abs" secondAttribute="top" id="wme-7I-WVb"/>
@@ -1031,6 +1030,7 @@
         <image name="iconDownload" width="50" height="50"/>
         <image name="iconLike" width="25" height="25"/>
         <image name="iconList" width="25" height="25"/>
+        <image name="iconMenu" width="25" height="25"/>
         <image name="iconMore" width="50" height="50"/>
         <image name="iconMusic" width="112" height="112"/>
         <image name="iconNext" width="25" height="25"/>

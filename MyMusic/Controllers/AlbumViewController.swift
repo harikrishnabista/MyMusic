@@ -62,8 +62,8 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.popViewController(animated: true)
     }
+    
     func downloadAlbumDetail() {
-        
         guard let url = URL(string:Constants.ALBUM_DETAIL_BASE_URL + album.id + "&entity=song") else {
             return
         }
@@ -95,22 +95,13 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
-        openPlayerWithTrack(track: nil)
+//        openPlayerWithTrack(playIndex: nil)
     }
     
-    func openPlayerWithTrack(track:Track?) {
-        if let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController {
-
-            if let tracks = album.tracks, tracks.count > 0 {
-                let player = Player(track: track == nil ? tracks[0] : track!)
-                player.playList = tracks
-                playerViewController.player = player
-                self.navigationController?.present(playerViewController, animated: true, completion: nil)
-            }
-        }
-        
-    }
-    
+//    func openPlayerWithTrack(playIndex:Int?) {
+//
+//    }
+//
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "TrackTableViewCell", for: indexPath) as! TrackTableViewCell
@@ -136,14 +127,16 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @objc func btnPlayCellTapped(sender : UIButton){
         if let tracks = album.tracks {
-            openPlayerWithTrack(track: tracks[sender.tag])
+            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: sender.tag)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        if let tracks = album.tracks{
-            openPlayerWithTrack(track: tracks[indexPath.row])
+        if let tracks = album.tracks, tracks.count > 0, let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController{
+                
+            playerViewController.playerMetaData = PlayerMetaData(tracks: tracks, playIndex: indexPath.row)
+            self.navigationController?.present(playerViewController, animated: true, completion: nil)
         }
         
         if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {

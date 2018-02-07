@@ -99,7 +99,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @objc func btnShuffleTapped(sender : UIButton){
-        print(sender.tag)
+        AudioPlayer.shared.setPlaylist(newPlayList: User.shared.myMusic.tracks, playIndex: sender.tag)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -163,24 +163,21 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
 //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        openPlayerWithTrack(track: User.shared.myMusic.tracks[indexPath.row])
+        
+        if let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController{
+            
+            playerViewController.playerMetaData = PlayerMetaData(tracks: User.shared.recentlyPlayed.tracks, playIndex: indexPath.row)
+            self.navigationController?.present(playerViewController, animated: true, completion: nil)
+        }
+        
+//        openPlayerWithTrack(track: User.shared.myMusic.tracks[indexPath.row])
 //        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
 //            cell.viewContainer.layer.borderColor = UIColor.init(red: 212/255, green: 212/255, blue: 212/255, alpha: 1.0).cgColor
 //        }
     }
     
-    func openPlayerWithTrack(track:Track) {
-        if let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController {
-            
-            let player = Player(track: track)
-            player.playList = [track]
-            playerViewController.player = player
-            self.navigationController?.present(playerViewController, animated: true, completion: nil)
-        }
-    }
-    
     @objc func btnPlayCellTapped(sender : UIButton){
-        openPlayerWithTrack(track: User.shared.myMusic.tracks[sender.tag])
+        AudioPlayer.shared.setPlaylist(newPlayList: User.shared.myMusic.tracks, playIndex: sender.tag)
     }
     
     /******************************* Collectionview section **********************************/
@@ -205,8 +202,10 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            cell.viewContainer.layer.borderColor = UIColor.lightGray.cgColor
+        if let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController{
+            
+            playerViewController.playerMetaData = PlayerMetaData(tracks: User.shared.myMusic.tracks, playIndex: indexPath.row)
+            self.navigationController?.present(playerViewController, animated: true, completion: nil)
         }
     }
     

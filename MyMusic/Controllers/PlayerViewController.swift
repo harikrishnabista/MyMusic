@@ -7,43 +7,40 @@
 //
 
 import UIKit
+import AVFoundation
 
 class PlayerViewController: UIViewController {
     
-    var player:Player!
+    var playerMetaData:PlayerMetaData!
+    var nowPlaying:Track!
+//    var avPlayer:AVPlayer?
+//    var avPlayerItem:AVPlayerItem?
     
     @IBOutlet weak var lblAlbumSubtitle: UILabel!
     @IBOutlet weak var lblAlbumTitle: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let isFav = player.nowPlaying.isMyMusic, isFav == true {
+        self.nowPlaying = self.playerMetaData.getCurrentTrack()
+        
+        if let isFav = nowPlaying.isMyMusic, isFav == true {
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
         }
+
+        imgTrack.setImageWithUrl(urlStr: nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
         
-        // as soon as it starts playing add to recently playlist
-        player.nowPlaying.playCount! =  player.nowPlaying.playCount! + 1
-        player.nowPlaying.isPlaying! = true
-        player.nowPlaying.recentlyPlayedDate = Date()
-        User.shared.recentlyPlayed.addToList(track: player.nowPlaying)
+        lblAlbumTitle.text = nowPlaying.collectionName
+        lblAlbumSubtitle.text = "\(playerMetaData.playList.count) tracks"
         
+        lblTrackTitle.text = nowPlaying.trackName
+        lblTrackSubTitle.text = nowPlaying.artistName
         
-        self.imgTrack.setImageWithUrl(urlStr: self.player.nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
-        
-        lblAlbumTitle.text = self.player.nowPlaying.collectionName
-        lblAlbumSubtitle.text = "\(player.playList.count) tracks"
-        
-        lblTrackTitle.text = player.nowPlaying.trackName
-        lblTrackSubTitle.text = player.nowPlaying.artistName
-        
-        lblCollectionPrice.text = player.nowPlaying.getCollectionPriceLabel()
-        lblTrackPrice.text = player.nowPlaying.getTrackPriceLabel()
+        lblCollectionPrice.text = nowPlaying.getCollectionPriceLabel()
+        lblTrackPrice.text = nowPlaying.getTrackPriceLabel()
         
         viewContainerBuy.layer.borderWidth = 1.0
         viewContainerBuy.layer.cornerRadius = 4.0
         viewContainerBuy.layer.borderColor = UIColor.lightText.cgColor
-        
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,18 +63,18 @@ class PlayerViewController: UIViewController {
     @IBAction func btnLikeTapped(_ sender: Any) {
 //        User.shared.
         
-        guard let isMyMusic = player.nowPlaying.isMyMusic else {
+        guard let isMyMusic = nowPlaying.isMyMusic else {
             return
         }
         
         if isMyMusic == false {
-            player.nowPlaying.isMyMusic = true
+            nowPlaying.isMyMusic = true
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
-            User.shared.myMusic.addToList(track: player.nowPlaying)
+            User.shared.myMusic.addToList(track: nowPlaying)
         }else{
-            player.nowPlaying.isMyMusic = false
+            nowPlaying.isMyMusic = false
             btnLike.setImage(UIImage(named:"iconLike"), for: .normal)
-            User.shared.myMusic.removeFromList(track: player.nowPlaying)
+            User.shared.myMusic.removeFromList(track: nowPlaying)
         }
     }
     
@@ -88,7 +85,6 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var btnLike: UIButton!
     
     // player controls
-    
     @IBAction func btnNextTapped(_ sender: Any) {
     }
     
@@ -106,14 +102,5 @@ class PlayerViewController: UIViewController {
     }
     @IBOutlet weak var lblTotalTime: UILabel!
     @IBOutlet weak var slider: UISlider!
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
