@@ -33,7 +33,10 @@ class AlbumDataParser {
                 let tracks = try JSONDecoder().decode([Track].self, from: tracksData)
                 
                 for item in tracks{
-                    item.metaData = TrackMetaData()
+                    item.rating = 0.0
+                    item.playCount = 0
+                    item.isPlaying = false
+                    item.isMyMusic = false 
                 }
                 
                 return tracks

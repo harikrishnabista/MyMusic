@@ -115,6 +115,10 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "TrackTableViewCell", for: indexPath) as! TrackTableViewCell
         
+        cell.selectionStyle = .none
+
+        cell.viewContainer.layer.borderColor = UIColor.init(red: 212/255, green: 212/255, blue: 212/255, alpha: 1.0).cgColor
+        
         if let track = album.tracks?[indexPath.row] {
             cell.lblTitle.text = track.trackName
             cell.lblSubTitle.text = track.collectionName
@@ -137,9 +141,21 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         if let tracks = album.tracks{
             openPlayerWithTrack(track: tracks[indexPath.row])
         }
+        
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+            cell.viewContainer.layer.borderColor = UIColor.lightGray.cgColor
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+            cell.viewContainer.layer.borderColor = UIColor.init(red: 212/255, green: 212/255, blue: 212/255, alpha: 1.0).cgColor
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

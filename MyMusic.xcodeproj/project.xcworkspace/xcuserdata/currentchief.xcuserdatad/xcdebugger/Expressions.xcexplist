@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "MyMusicViewController.viewWillAppear(_:):MyMusicViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "User.shared.myMusic.tracks">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #1 in AlbumViewController.downloadAlbumDetail():AlbumViewController.swift">
          <PersistentStrings>
             <PersistentString

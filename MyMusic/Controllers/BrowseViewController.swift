@@ -24,6 +24,7 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         if self.albumCollection == nil {
             downloadTopAlbums()
         }
+        
     }
     
     func downloadTopAlbums() {
@@ -67,7 +68,8 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         cell.lblTitle.text = album.name
-        cell.lblSubTitle.text = "\(album.getTotalSongs()) tracks"
+//        cell.lblSubTitle.text = "\(album.getTotalSongs()) tracks"
+        cell.lblSubTitle.text = album.artistName
         
         if let downloadTask = cell.imgItem.setImageWithUrl(urlStr: album.artworkUrl100, placeHolderImageName: "iconMusic") {
             imageDownloadTasks[album.artworkUrl100] = downloadTask
@@ -98,7 +100,8 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         return CGSize(width: width/2, height: width/2)
     }
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
         // stop the download task if it is still running because we mo more need this image as cell wont be visible
         if let album = albumCollection?.albums[indexPath.row] {
             self.imageDownloadTasks[album.artworkUrl100]?.cancel()

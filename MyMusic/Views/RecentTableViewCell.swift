@@ -1,15 +1,16 @@
 //
-//  RecentlyPlayedTableViewCell.swift
+//  RecentTableViewCell.swift
 //  MyMusic
 //
-//  Created by Hari Krishna Bista on 2/4/18.
+//  Created by Hari Krishna Bista on 2/6/18.
 //  Copyright © 2018 meroapp. All rights reserved.
 //
 
 import UIKit
 
-class RecentlyPlayedTableViewCell: UITableViewCell {
+class RecentTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var collectionView: UICollectionView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -22,7 +22,11 @@ class MyMusic: NSObject, MusicCollection {
     var tracks:[Track] = []
     
     func addToList(track: Track) {
-        self.tracks.append(track)
+        if let index = self.tracks.index(of: track) {
+            self.tracks.remove(at: index)
+        }
+        
+        self.tracks.insert(track, at: 0)
     }
     
     func removeFromList(track: Track) {
@@ -34,5 +38,4 @@ class MyMusic: NSObject, MusicCollection {
     func shuffle() {
         
     }
-
 }

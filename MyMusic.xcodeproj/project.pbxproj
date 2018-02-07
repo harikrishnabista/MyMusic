@@ -26,7 +26,6 @@
 		56D934452027B79C00D10A94 /* ApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934412027B79C00D10A94 /* ApiCaller.swift */; };
 		56D934462027B79C00D10A94 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934422027B79C00D10A94 /* Extensions.swift */; };
 		56D934482027BA5D00D10A94 /* MyMusicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934472027BA5D00D10A94 /* MyMusicTableViewCell.swift */; };
-		56D934502027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9344F2027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift */; };
 		56D9345220280C4100D10A94 /* BrowseItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9345120280C4100D10A94 /* BrowseItemCollectionViewCell.swift */; };
 		56D934552028119B00D10A94 /* AlbumDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934542028119B00D10A94 /* AlbumDataParser.swift */; };
 		56D93458202812AE00D10A94 /* LoadingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 56D93456202812AE00D10A94 /* LoadingView.xib */; };
@@ -36,6 +35,8 @@
 		56D9345F2028478100D10A94 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */; };
 		56D9346120284A5D00D10A94 /* AlbumCollectionDataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9346020284A5D00D10A94 /* AlbumCollectionDataParser.swift */; };
 		56D9349F202982E500D10A94 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9349E202982E500D10A94 /* User.swift */; };
+		56D934A1202A53B200D10A94 /* RecentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */; };
+		56D934A3202A545100D10A94 /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934A2202A545100D10A94 /* RecentTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,7 +61,6 @@
 		56D934412027B79C00D10A94 /* ApiCaller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiCaller.swift; sourceTree = "<group>"; };
 		56D934422027B79C00D10A94 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		56D934472027BA5D00D10A94 /* MyMusicTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMusicTableViewCell.swift; sourceTree = "<group>"; };
-		56D9344F2027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyPlayedTableViewCell.swift; sourceTree = "<group>"; };
 		56D9345120280C4100D10A94 /* BrowseItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		56D934542028119B00D10A94 /* AlbumDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDataParser.swift; sourceTree = "<group>"; };
 		56D93456202812AE00D10A94 /* LoadingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingView.xib; sourceTree = "<group>"; };
@@ -70,6 +70,8 @@
 		56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
 		56D9346020284A5D00D10A94 /* AlbumCollectionDataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionDataParser.swift; sourceTree = "<group>"; };
 		56D9349E202982E500D10A94 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCollectionViewCell.swift; sourceTree = "<group>"; };
+		56D934A2202A545100D10A94 /* RecentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,10 +149,11 @@
 				56D934192027ABE900D10A94 /* Main.storyboard */,
 				56D9341E2027ABE900D10A94 /* LaunchScreen.storyboard */,
 				56D934472027BA5D00D10A94 /* MyMusicTableViewCell.swift */,
-				56D9344F2027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift */,
 				56D9345120280C4100D10A94 /* BrowseItemCollectionViewCell.swift */,
 				56D9345C2028406900D10A94 /* TrackTableViewCell.swift */,
 				56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */,
+				56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */,
+				56D934A2202A545100D10A94 /* RecentTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -250,7 +253,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				56D934552028119B00D10A94 /* AlbumDataParser.swift in Sources */,
-				56D934502027C3FD00D10A94 /* RecentlyPlayedTableViewCell.swift in Sources */,
 				56D9345F2028478100D10A94 /* AlbumTableViewCell.swift in Sources */,
 				56D9349F202982E500D10A94 /* User.swift in Sources */,
 				56D9342C2027AC9700D10A94 /* HomeViewController.swift in Sources */,
@@ -258,6 +260,7 @@
 				56D9342E2027ACE700D10A94 /* MyMusicViewController.swift in Sources */,
 				56D9346120284A5D00D10A94 /* AlbumCollectionDataParser.swift in Sources */,
 				56D934302027ACFE00D10A94 /* BrowseViewController.swift in Sources */,
+				56D934A3202A545100D10A94 /* RecentTableViewCell.swift in Sources */,
 				56D9345B2028389200D10A94 /* AlbumViewController.swift in Sources */,
 				56D9343C2027ADF500D10A94 /* RecentlyPlayed.swift in Sources */,
 				56D934162027ABE900D10A94 /* AppDelegate.swift in Sources */,
@@ -272,6 +275,7 @@
 				56D934342027AD9100D10A94 /* Track.swift in Sources */,
 				56D9345220280C4100D10A94 /* BrowseItemCollectionViewCell.swift in Sources */,
 				56D934432027B79C00D10A94 /* Constants.swift in Sources */,
+				56D934A1202A53B200D10A94 /* RecentCollectionViewCell.swift in Sources */,
 				56D934482027BA5D00D10A94 /* MyMusicTableViewCell.swift in Sources */,
 				56D9345D2028406900D10A94 /* TrackTableViewCell.swift in Sources */,
 			);

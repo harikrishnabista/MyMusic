@@ -24,7 +24,10 @@ class TrackTableViewCell: UITableViewCell {
     
     
     override func draw(_ rect: CGRect) {
-        self.viewContainer.layer.borderColor = UIColor.white.cgColor
+//        self.viewContainer.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.5).cgColor
+        
+        viewContainer.layer.borderColor = UIColor.init(red: 212/255, green: 212/255, blue: 212/255, alpha: 1.0).cgColor
+        
         viewContainer.layer.cornerRadius = 3.0
         viewContainer.layer.borderWidth = 1.0
         

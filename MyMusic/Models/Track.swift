@@ -8,14 +8,6 @@
 
 import UIKit
 
-class TrackMetaData: Codable {
-    // computed properties
-    var rating:Double = 0.0
-    var playCount:Int = 0
-    var isPlaying:Bool = false
-    var isFavorite:Bool = false
-}
-
 class Track: NSObject, Codable {
     
     var trackId:Int64
@@ -49,7 +41,18 @@ class Track: NSObject, Codable {
     var primaryGenreName:String = "Unknown"
     var isStreamable:Bool = false
     
-    var metaData:TrackMetaData?
+//    var metaData:TrackMetaData?
+    
+//    var rating:Double = 0.0
+//    var playCount:Int = 0
+//    var isPlaying:Bool = false
+//    var isMyMusic:Bool = false
+    
+    var rating:Double?
+    var playCount:Int?
+    var isPlaying:Bool?
+    var isMyMusic:Bool?
+    var recentlyPlayedDate:Date?
 
     init(id:Int64, name:String) {
         self.trackId = id

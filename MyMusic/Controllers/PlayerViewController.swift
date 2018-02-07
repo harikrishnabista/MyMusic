@@ -17,6 +17,17 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let isFav = player.nowPlaying.isMyMusic, isFav == true {
+            btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
+        }
+        
+        // as soon as it starts playing add to recently playlist
+        player.nowPlaying.playCount! =  player.nowPlaying.playCount! + 1
+        player.nowPlaying.isPlaying! = true
+        player.nowPlaying.recentlyPlayedDate = Date()
+        User.shared.recentlyPlayed.addToList(track: player.nowPlaying)
+        
+        
         self.imgTrack.setImageWithUrl(urlStr: self.player.nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
         
         lblAlbumTitle.text = self.player.nowPlaying.collectionName
@@ -55,18 +66,21 @@ class PlayerViewController: UIViewController {
     @IBAction func btnLikeTapped(_ sender: Any) {
 //        User.shared.
         
-        guard let trackMetaData = player.nowPlaying.metaData else {
+        guard let isMyMusic = player.nowPlaying.isMyMusic else {
             return
         }
         
-        if trackMetaData.isFavorite == false {
+        if isMyMusic == false {
+            player.nowPlaying.isMyMusic = true
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
             User.shared.myMusic.addToList(track: player.nowPlaying)
         }else{
+            player.nowPlaying.isMyMusic = false
             btnLike.setImage(UIImage(named:"iconLike"), for: .normal)
             User.shared.myMusic.removeFromList(track: player.nowPlaying)
         }
     }
+    
     @IBOutlet weak var lblTrackTitle: UILabel!
     @IBOutlet weak var lblTrackSubTitle: UILabel!
     
