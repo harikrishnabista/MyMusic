@@ -12,7 +12,7 @@ import AVFoundation
 class PlayerViewController: UIViewController {
     
     var playerMetaData:PlayerMetaData!
-    var nowPlaying:Track!
+    var nowPlaying:Track?
 //    var avPlayer:AVPlayer?
 //    var avPlayerItem:AVPlayerItem?
     
@@ -22,6 +22,10 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         
         self.nowPlaying = self.playerMetaData.getCurrentTrack()
+        
+        guard let nowPlaying = self.nowPlaying else {
+            return
+        }
         
         if let isFav = nowPlaying.isMyMusic, isFav == true {
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
@@ -62,6 +66,10 @@ class PlayerViewController: UIViewController {
     }
     @IBAction func btnLikeTapped(_ sender: Any) {
 //        User.shared.
+        
+        guard let nowPlaying = self.nowPlaying else {
+            return
+        }
         
         guard let isMyMusic = nowPlaying.isMyMusic else {
             return

@@ -42,9 +42,9 @@ class HomeViewController: UIViewController, UIPageViewControllerDataSource {
             let bottom = pageViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             
             bottom.isActive = true
-            bottom.constant = bottom.constant - 50
+            bottom.constant = bottom.constant - 60
             
-        }
+        } 
     }
 
     

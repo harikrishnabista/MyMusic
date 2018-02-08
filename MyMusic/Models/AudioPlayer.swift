@@ -65,18 +65,33 @@ class AudioPlayer {
     }
     
     func play() {
+        NotificationCenter.default.addObserver(self, selector: #selector(AudioPlayer.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: avPlayer.currentItem)
+        
         avPlayer.play()
         
         // as soon as it starts playing add to recently playlist
-        let currentTrack = playerMetaData.getCurrentTrack()
-        currentTrack.playCount =  currentTrack.playCount! + 1
-        currentTrack.isPlaying! = true
-        currentTrack.recentlyPlayedDate = Date()
-        User.shared.recentlyPlayed.addToList(track: currentTrack)
+        if let currentTrack = playerMetaData.getCurrentTrack(){
+            currentTrack.playCount =  currentTrack.playCount ?? 0 + 1
+            currentTrack.isPlaying = true
+            currentTrack.recentlyPlayedDate = Date()
+            User.shared.recentlyPlayed.addToList(track: currentTrack)
+            
+            currentTrack.isMyMusic = true
+            User.shared.myMusic.addToList(track: currentTrack)
+        }
+    }
+    
+    // observers
+    @objc func playerDidFinishPlaying(sender: NSNotification) {
+        // update UI
+        print("playing finished.")
     }
     
     func pause() {
         avPlayer.pause()
+        
+        // change playing status 
+        playerMetaData.getCurrentTrack()?.isPlaying = false
     }
     
     func playNext(){
@@ -104,8 +119,10 @@ class AudioPlayer {
         }
         
         playerMetaData.setPlayList(newPlayList: newPlayList, playIndex: playIndex)
-        prepareToPlay(track: playerMetaData.getCurrentTrack())
-        play()
+        if let currentTrack = playerMetaData.getCurrentTrack() {
+            prepareToPlay(track: currentTrack)
+            play()
+        }
     }
     
     func setPlaylist(newPlayList:[Track]) {
@@ -114,14 +131,19 @@ class AudioPlayer {
         }
         
         playerMetaData.setPlayList(newPlayList: newPlayList)
-        prepareToPlay(track: playerMetaData.getCurrentTrack())
-        play()
+        
+        if let currentTrack = playerMetaData.getCurrentTrack() {
+            prepareToPlay(track: currentTrack)
+            play()
+        }
     }
     
     func shuffle(){
         playerMetaData.shuffle()
-        prepareToPlay(track: playerMetaData.getCurrentTrack())
-        play()
+        if let currentTrack = playerMetaData.getCurrentTrack() {
+            prepareToPlay(track: currentTrack)
+            play()
+        }
     }
 }
 
@@ -165,8 +187,12 @@ class PlayerMetaData {
         return playList[playIndex]
     }
     
-    func getCurrentTrack() -> Track {
-        return playList[playIndex]
+    func getCurrentTrack() -> Track? {
+        if playList.count > 0{
+            return playList[playIndex]
+        }
+        
+        return nil
     }
     
     func shuffle() {

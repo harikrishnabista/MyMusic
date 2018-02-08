@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		568893FA202BFE1F00012937 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568893F9202BFE1F00012937 /* NowPlayingView.swift */; };
+		568893FE202BFE4B00012937 /* NowPlaying.xib in Resources */ = {isa = PBXBuildFile; fileRef = 568893FD202BFE4B00012937 /* NowPlaying.xib */; };
+		56889400202C034E00012937 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568893FF202C034E00012937 /* MainViewController.swift */; };
 		56D934162027ABE900D10A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934152027ABE900D10A94 /* AppDelegate.swift */; };
 		56D9341B2027ABE900D10A94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D934192027ABE900D10A94 /* Main.storyboard */; };
 		56D9341D2027ABE900D10A94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9341C2027ABE900D10A94 /* Assets.xcassets */; };
@@ -17,7 +20,7 @@
 		56D934322027AD2800D10A94 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934312027AD2800D10A94 /* PlayerViewController.swift */; };
 		56D934342027AD9100D10A94 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934332027AD9000D10A94 /* Track.swift */; };
 		56D934362027ADA000D10A94 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934352027ADA000D10A94 /* Album.swift */; };
-		56D934382027ADAB00D10A94 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934372027ADAB00D10A94 /* Player.swift */; };
+		56D934382027ADAB00D10A94 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934372027ADAB00D10A94 /* AudioPlayer.swift */; };
 		56D9343A2027ADDB00D10A94 /* MyMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934392027ADDB00D10A94 /* MyMusic.swift */; };
 		56D9343C2027ADF500D10A94 /* RecentlyPlayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9343B2027ADF500D10A94 /* RecentlyPlayed.swift */; };
 		56D9343E2027AE0500D10A94 /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9343D2027AE0500D10A94 /* AlbumCollection.swift */; };
@@ -40,6 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		568893F9202BFE1F00012937 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
+		568893FD202BFE4B00012937 /* NowPlaying.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NowPlaying.xib; sourceTree = "<group>"; };
+		568893FF202C034E00012937 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		56D934122027ABE900D10A94 /* MyMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D934152027ABE900D10A94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D9341A2027ABE900D10A94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -52,7 +58,7 @@
 		56D934312027AD2800D10A94 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		56D934332027AD9000D10A94 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		56D934352027ADA000D10A94 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
-		56D934372027ADAB00D10A94 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		56D934372027ADAB00D10A94 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		56D934392027ADDB00D10A94 /* MyMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMusic.swift; sourceTree = "<group>"; };
 		56D9343B2027ADF500D10A94 /* RecentlyPlayed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyPlayed.swift; sourceTree = "<group>"; };
 		56D9343D2027AE0500D10A94 /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
@@ -131,7 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				56D934332027AD9000D10A94 /* Track.swift */,
-				56D934372027ADAB00D10A94 /* Player.swift */,
+				56D934372027ADAB00D10A94 /* AudioPlayer.swift */,
 				56D934392027ADDB00D10A94 /* MyMusic.swift */,
 				56D9343B2027ADF500D10A94 /* RecentlyPlayed.swift */,
 				56D934352027ADA000D10A94 /* Album.swift */,
@@ -154,6 +160,8 @@
 				56D9345E2028478100D10A94 /* AlbumTableViewCell.swift */,
 				56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */,
 				56D934A2202A545100D10A94 /* RecentTableViewCell.swift */,
+				568893F9202BFE1F00012937 /* NowPlayingView.swift */,
+				568893FD202BFE4B00012937 /* NowPlaying.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -164,8 +172,9 @@
 				56D9342B2027AC9700D10A94 /* HomeViewController.swift */,
 				56D9342D2027ACE700D10A94 /* MyMusicViewController.swift */,
 				56D9342F2027ACFE00D10A94 /* BrowseViewController.swift */,
-				56D934312027AD2800D10A94 /* PlayerViewController.swift */,
 				56D9345A2028389200D10A94 /* AlbumViewController.swift */,
+				56D934312027AD2800D10A94 /* PlayerViewController.swift */,
+				568893FF202C034E00012937 /* MainViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -238,6 +247,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				568893FE202BFE4B00012937 /* NowPlaying.xib in Resources */,
 				56D934202027ABE900D10A94 /* LaunchScreen.storyboard in Resources */,
 				56D93458202812AE00D10A94 /* LoadingView.xib in Resources */,
 				56D9341D2027ABE900D10A94 /* Assets.xcassets in Resources */,
@@ -259,12 +269,14 @@
 				56D9343A2027ADDB00D10A94 /* MyMusic.swift in Sources */,
 				56D9342E2027ACE700D10A94 /* MyMusicViewController.swift in Sources */,
 				56D9346120284A5D00D10A94 /* AlbumCollectionDataParser.swift in Sources */,
+				56889400202C034E00012937 /* MainViewController.swift in Sources */,
 				56D934302027ACFE00D10A94 /* BrowseViewController.swift in Sources */,
 				56D934A3202A545100D10A94 /* RecentTableViewCell.swift in Sources */,
+				568893FA202BFE1F00012937 /* NowPlayingView.swift in Sources */,
 				56D9345B2028389200D10A94 /* AlbumViewController.swift in Sources */,
 				56D9343C2027ADF500D10A94 /* RecentlyPlayed.swift in Sources */,
 				56D934162027ABE900D10A94 /* AppDelegate.swift in Sources */,
-				56D934382027ADAB00D10A94 /* Player.swift in Sources */,
+				56D934382027ADAB00D10A94 /* AudioPlayer.swift in Sources */,
 				56D9343E2027AE0500D10A94 /* AlbumCollection.swift in Sources */,
 				56D934322027AD2800D10A94 /* PlayerViewController.swift in Sources */,
 				56D934452027B79C00D10A94 /* ApiCaller.swift in Sources */,

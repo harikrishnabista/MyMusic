@@ -96,6 +96,25 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
 //        openPlayerWithTrack(playIndex: nil)
+        
+//        let indexPath = IndexPath(row: 0, section: 0)
+//        let playIndex = indexPath.row
+//
+//        // // emulate deselectRow
+//        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+//            if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
+//                prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+//            }
+//            tableView.deselectRow(at: selectedIndexPath, animated: false)
+//        }
+//
+//        // emulate didselected
+//        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+//
+//        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+//            handleAudioActionForCell(cell: cell, playIndex: playIndex)
+//        }
+        
     }
     
 //    func openPlayerWithTrack(playIndex:Int?) {
@@ -117,7 +136,12 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
             
-//            cell.btnPlay.setValue(indexPath, forKey: "indexPath")
+            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+                cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
+            }else{
+                cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+            }
+            
             cell.btnPlay.tag = indexPath.row
             cell.btnPlay.addTarget(self, action: #selector(AlbumViewController.btnPlayCellTapped(sender:)), for: .touchUpInside)
         }
@@ -126,29 +150,57 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func btnPlayCellTapped(sender : UIButton){
-        if let tracks = album.tracks {
-            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: sender.tag)
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        
+        // // emulate deselectRow
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
+                prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+            }
+            tableView.deselectRow(at: selectedIndexPath, animated: false)
+        }
+        
+        // emulate didselected
+        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+            handleAudioActionForCell(cell: cell, playIndex: sender.tag)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        if let tracks = album.tracks, tracks.count > 0, let playerViewController = self.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController{
-                
-            playerViewController.playerMetaData = PlayerMetaData(tracks: tracks, playIndex: indexPath.row)
-            self.navigationController?.present(playerViewController, animated: true, completion: nil)
+        guard let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell else {
+            return
         }
+        handleAudioActionForCell(cell: cell, playIndex: indexPath.row)
+    }
+    
+    func handleAudioActionForCell(cell:TrackTableViewCell,playIndex:Int) {
+        guard let tracks = album.tracks, tracks.count > 0 else {
+            return
+        }
+        let track = tracks[playIndex]
         
-        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            cell.viewContainer.layer.borderColor = UIColor.lightGray.cgColor
+        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack() {
+            if track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+                AudioPlayer.shared.pause()
+                // update cell UI and change button to play
+                cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+            }else{
+                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
+                // update cell UI and change button to pause
+                cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
+            }
+        }else{
+            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
+            cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
         }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            cell.viewContainer.layer.borderColor = UIColor.init(red: 212/255, green: 212/255, blue: 212/255, alpha: 1.0).cgColor
+            cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

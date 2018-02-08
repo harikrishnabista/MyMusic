@@ -22,16 +22,22 @@ class MyMusic: NSObject, MusicCollection {
     var tracks:[Track] = []
     
     func addToList(track: Track) {
-        if let index = self.tracks.index(of: track) {
-            self.tracks.remove(at: index)
+        
+        for (i,item) in self.tracks.enumerated() {
+            if item.trackId == track.trackId {
+//                self.tracks.remove(at: i)
+                return
+            }
         }
         
         self.tracks.insert(track, at: 0)
     }
     
     func removeFromList(track: Track) {
-        if let index = self.tracks.index(of: track) {
-            self.tracks.remove(at: index)
+        for (i,item) in self.tracks.enumerated() {
+            if item.trackId == track.trackId {
+                self.tracks.remove(at: i)
+            }
         }
     }
     
