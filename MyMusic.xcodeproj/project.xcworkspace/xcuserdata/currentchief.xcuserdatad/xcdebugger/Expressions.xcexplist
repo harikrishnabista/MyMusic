@@ -3,10 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "MyMusicViewController.viewWillAppear(_:):MyMusicViewController.swift">
+         contextName = "AlbumViewController.tableView(_:numberOfRowsInSection:):AlbumViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "User.shared.myMusic.tracks">
+               value = "album">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -27,6 +27,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "MyMusicViewController.viewWillAppear(_:):MyMusicViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "User.shared.recentlyPlayed.tracks">
+            </PersistentString>
+            <PersistentString
+               value = "User.shared.myMusic.tracks">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PlayerViewController.btnLikeTapped(_:):PlayerViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -39,14 +50,6 @@
          <PersistentStrings>
             <PersistentString
                value = "self.album">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "AlbumViewController.tableView(_:numberOfRowsInSection:):AlbumViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "album">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

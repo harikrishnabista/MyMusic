@@ -20,6 +20,20 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var lblAlbumTitle: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        updateUI()
+        
+        // subscribe for the AudioPlayer nowplaying updated
+        NotificationCenter.default.addObserver(self, selector: #selector(NowPlayingView.nowPlayingUpdated), name: NSNotification.Name(rawValue: Constants.NotificationName.NOW_PLAYING_UPDATED), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(NowPlayingView.nowPlayingSeekTimeUpdated), name: NSNotification.Name(rawValue: Constants.NotificationName.NOW_PLAYING_SEEK_TIME_UPDATED), object: nil)
+        
+        viewContainerBuy.layer.borderWidth = 1.0
+        viewContainerBuy.layer.cornerRadius = 4.0
+        viewContainerBuy.layer.borderColor = UIColor.lightText.cgColor
+    }
+    
+    func updateUI() {
         
         self.nowPlaying = self.playerMetaData.getCurrentTrack()
         
@@ -30,7 +44,13 @@ class PlayerViewController: UIViewController {
         if let isFav = nowPlaying.isMyMusic, isFav == true {
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
         }
-
+        
+        if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
+        }else{
+            btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+        }
+        
         imgTrack.setImageWithUrl(urlStr: nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
         
         lblAlbumTitle.text = nowPlaying.collectionName
@@ -41,10 +61,14 @@ class PlayerViewController: UIViewController {
         
         lblCollectionPrice.text = nowPlaying.getCollectionPriceLabel()
         lblTrackPrice.text = nowPlaying.getTrackPriceLabel()
-        
-        viewContainerBuy.layer.borderWidth = 1.0
-        viewContainerBuy.layer.cornerRadius = 4.0
-        viewContainerBuy.layer.borderColor = UIColor.lightText.cgColor
+    }
+    
+    @objc func nowPlayingSeekTimeUpdated() {
+        slider.value = AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+    }
+    
+    @objc func nowPlayingUpdated() {
+        updateUI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -94,19 +118,33 @@ class PlayerViewController: UIViewController {
     
     // player controls
     @IBAction func btnNextTapped(_ sender: Any) {
+        AudioPlayer.shared.playNext()
     }
     
     @IBAction func btnRepeatTapped(_ sender: Any) {
     }
     @IBOutlet weak var btnPlay: UIButton!
     @IBAction func btnPlayTapped(_ sender: Any) {
+
+        guard let nowPlaying = self.nowPlaying else {
+            return
+        }
+        
+        if let isPlaying = nowPlaying.isPlaying, isPlaying == false {
+            AudioPlayer.shared.play()
+        }else{
+            AudioPlayer.shared.pause()
+        }
+        
     }
     
     @IBAction func btnPrevTapped(_ sender: Any) {
+        AudioPlayer.shared.playPrev()
     }
     
     @IBOutlet weak var lblSeekTime: UILabel!
     @IBAction func btnShuffleTapped(_ sender: Any) {
+        AudioPlayer.shared.shuffle()
     }
     @IBOutlet weak var lblTotalTime: UILabel!
     @IBOutlet weak var slider: UISlider!

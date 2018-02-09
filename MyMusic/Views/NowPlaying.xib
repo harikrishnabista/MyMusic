@@ -16,6 +16,7 @@
                 <outlet property="imgTrack" destination="uT7-7Y-LLx" id="DL8-Os-Zae"/>
                 <outlet property="lblSubtitle" destination="DMI-4z-OZa" id="l72-bn-tgc"/>
                 <outlet property="lblTitle" destination="mFj-DZ-kFq" id="nBD-bI-cyK"/>
+                <outlet property="progressBar" destination="Vo7-5e-16o" id="fUW-jl-0ul"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -34,22 +35,30 @@
                             </constraints>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now Playing" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mFj-DZ-kFq">
-                            <rect key="frame" x="70" y="10.5" width="276" height="19.5"/>
+                            <rect key="frame" x="70" y="16.5" width="266" height="19.5"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DMI-4z-OZa">
-                            <rect key="frame" x="70" y="35" width="276" height="16"/>
+                            <rect key="frame" x="70" y="38" width="266" height="16"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FGe-JS-pAl">
-                            <rect key="frame" x="356" y="15" width="30" height="30"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FH3-W7-T2B">
+                            <rect key="frame" x="185.5" y="8" width="25" height="2"/>
+                            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="FbY-Fc-Azs"/>
-                                <constraint firstAttribute="width" constant="30" id="wGA-u7-uek"/>
+                                <constraint firstAttribute="height" constant="2" id="Kzf-Pn-cON"/>
+                                <constraint firstAttribute="width" constant="25" id="dza-uu-xxo"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FGe-JS-pAl">
+                            <rect key="frame" x="351" y="12.5" width="35" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="35" id="Jli-6e-Ipr"/>
+                                <constraint firstAttribute="width" constant="35" id="UO3-ha-pQC"/>
                             </constraints>
                             <state key="normal" image="iconPlay"/>
                             <connections>
@@ -57,27 +66,39 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.0044918938061411237" green="0.58913536269430056" blue="0.092534453877925804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="mFj-DZ-kFq" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" constant="-10" id="6JG-yv-aBQ"/>
+                        <constraint firstItem="FH3-W7-T2B" firstAttribute="top" secondItem="T2u-SG-XlB" secondAttribute="top" constant="8" id="4uo-bO-qYv"/>
+                        <constraint firstItem="mFj-DZ-kFq" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" constant="-4" id="6JG-yv-aBQ"/>
                         <constraint firstItem="mFj-DZ-kFq" firstAttribute="leading" secondItem="uT7-7Y-LLx" secondAttribute="trailing" constant="10" id="AXR-uQ-ZIb"/>
-                        <constraint firstItem="FGe-JS-pAl" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" id="Gkv-h4-44g"/>
-                        <constraint firstItem="DMI-4z-OZa" firstAttribute="top" secondItem="mFj-DZ-kFq" secondAttribute="bottom" constant="5" id="ORz-Z6-D4e"/>
+                        <constraint firstItem="FH3-W7-T2B" firstAttribute="centerX" secondItem="T2u-SG-XlB" secondAttribute="centerX" id="NWB-bD-tkh"/>
                         <constraint firstItem="uT7-7Y-LLx" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" id="QBt-9n-y6u"/>
-                        <constraint firstItem="FGe-JS-pAl" firstAttribute="leading" secondItem="mFj-DZ-kFq" secondAttribute="trailing" constant="10" id="TK0-8s-Gic"/>
                         <constraint firstItem="DMI-4z-OZa" firstAttribute="leading" secondItem="uT7-7Y-LLx" secondAttribute="trailing" constant="10" id="VJh-dV-DiH"/>
+                        <constraint firstItem="DMI-4z-OZa" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" constant="16" id="Z3N-0r-9Js"/>
                         <constraint firstItem="uT7-7Y-LLx" firstAttribute="leading" secondItem="T2u-SG-XlB" secondAttribute="leading" id="nNq-hU-UvH"/>
-                        <constraint firstAttribute="trailing" secondItem="FGe-JS-pAl" secondAttribute="trailing" constant="10" id="o5q-GM-gBT"/>
-                        <constraint firstItem="FGe-JS-pAl" firstAttribute="leading" secondItem="DMI-4z-OZa" secondAttribute="trailing" constant="10" id="qsr-CG-qfz"/>
+                        <constraint firstAttribute="trailing" secondItem="mFj-DZ-kFq" secondAttribute="trailing" constant="60" id="o0L-y3-ukC"/>
+                        <constraint firstItem="FGe-JS-pAl" firstAttribute="centerY" secondItem="T2u-SG-XlB" secondAttribute="centerY" id="tcz-Z1-WS3"/>
+                        <constraint firstAttribute="trailing" secondItem="FGe-JS-pAl" secondAttribute="trailing" constant="10" id="tkY-3v-jwP"/>
+                        <constraint firstAttribute="trailing" secondItem="DMI-4z-OZa" secondAttribute="trailing" constant="60" id="xha-l5-O69"/>
                     </constraints>
                 </view>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vo7-5e-16o">
+                    <rect key="frame" x="0.0" y="0.0" width="396" height="3"/>
+                    <color key="tintColor" red="0.0005678065342795322" green="0.55054805761606218" blue="0.087644241280812413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="3" id="WHD-df-r7T"/>
+                    </constraints>
+                </progressView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="T2u-SG-XlB" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="Hzc-jy-ITj"/>
                 <constraint firstItem="T2u-SG-XlB" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="JAH-7u-k4t"/>
+                <constraint firstItem="Vo7-5e-16o" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Z2Y-Xa-JHv"/>
+                <constraint firstItem="Vo7-5e-16o" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jTK-p0-pJL"/>
                 <constraint firstItem="T2u-SG-XlB" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="tMR-o9-WFB"/>
                 <constraint firstItem="T2u-SG-XlB" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="vHn-Go-Rgp"/>
+                <constraint firstAttribute="trailing" secondItem="Vo7-5e-16o" secondAttribute="trailing" id="zXn-EL-Ok8"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

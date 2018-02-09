@@ -100,6 +100,13 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         return CGSize(width: width/2, height: width/2)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        
+        let width = collectionView.bounds.size.width - 10
+        
+        return CGSize(width: width, height: width/4)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
         // stop the download task if it is still running because we mo more need this image as cell wont be visible

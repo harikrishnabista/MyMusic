@@ -13,5 +13,10 @@ class Constants: NSObject {
 
     //    https://itunes.apple.com/lookup?id=1330759954&entity=song
     public static let ALBUM_DETAIL_BASE_URL = "https://itunes.apple.com/lookup?id="
+    
+    struct NotificationName {
+        public static let NOW_PLAYING_UPDATED = "com.mymusic.nowplayingupdated"
+        public static let NOW_PLAYING_SEEK_TIME_UPDATED = "com.mymusic.seektimeupdated"
+    }
 
 }

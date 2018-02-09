@@ -34,7 +34,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
-        if User.shared.recentlyPlayed.tracks.count > 0 {
+        if User.shared.myMusic.tracks.count > 0 {
             lblMessage.isHidden = true
         }else{
             lblMessage.isHidden = false
@@ -209,7 +209,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         self.imageDownloadTasks[track.artworkUrl100]?.cancel()
         self.imageDownloadTasks.removeValue(forKey: track.artworkUrl100)
     }
-    
+        
     /******************************* Collectionview section **********************************/
     
     func collectionView(_ collectionView: UICollectionView,
