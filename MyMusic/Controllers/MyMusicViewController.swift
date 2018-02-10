@@ -30,6 +30,42 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // subscribe for the AudioPlayer nowplaying updated
+        NotificationCenter.default.addObserver(self, selector: #selector(NowPlayingView.nowPlayingUpdated), name: NSNotification.Name(rawValue: Constants.NotificationName.NOW_PLAYING_UPDATED), object: nil)
+    }
+    
+    @objc func nowPlayingUpdated() {
+        guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
+            return
+        }
+        
+        // for my music
+        for (i,item) in User.shared.myMusic.tracks.enumerated() {
+            if nowPlaying.trackId == item.trackId {
+                // update uitableviewcell for now playing
+                let indexPath = IndexPath(row: i, section: 1)
+                if let cell = tableView.cellForRow(at: indexPath){
+                    tableView.reloadRows(at: [indexPath], with: .none)
+                }
+                break
+            }
+        }
+        
+        // for recently played music
+        
+        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? RecentTableViewCell{
+            //                    cell.collectionView.reloadItems(at: [IndexPath(row: i, section: 0)])
+            cell.collectionView.reloadData()
+        }
+        
+//        for (i,item) in User.shared.recentlyPlayed.tracks.enumerated() {
+//            if nowPlaying.trackId == item.trackId {
+//                // update uicollectionviewcell for now playing
+//
+//                break
+//            }
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,9 +165,11 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.lblSubTitle.text = track.collectionName
             cell.lblSubSubTitle.text = track.artistName
             
-            cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
+            if let downloadTask = cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic"){
+                self.imageDownloadTasks[track.artworkUrl100] == downloadTask
+            }
             
-            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
@@ -146,10 +184,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell else {
-            return
-        }
-        handleAudioActionForCell(cell: cell, playIndex: indexPath.row)
+        handleAudioActionForTracks(tracks: User.shared.recentlyPlayed.tracks, playIndex: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -158,43 +193,36 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func handleAudioActionForCell(cell:TrackTableViewCell,playIndex:Int) {
-        let tracks = User.shared.myMusic.tracks
+    func handleAudioActionForTracks(tracks:[Track],playIndex:Int) {
+        guard tracks.count > 0 else {
+            return
+        }
+        
         let track = tracks[playIndex]
         
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack() {
-            if track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
-                AudioPlayer.shared.pause()
-                // update cell UI and change button to play
-                cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-            }else{
-                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-                // update cell UI and change button to pause
-                cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
-            }
+        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+            AudioPlayer.shared.pause()
         }else{
             AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-            cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
         }
     }
     
     @objc func btnPlayCellTapped(sender : UIButton){
-        let indexPath = IndexPath(row: sender.tag, section: 1)
         
-        // // emulate deselectRow
+        // deselect update
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
-                prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-            }
             tableView.deselectRow(at: selectedIndexPath, animated: false)
+            if let cell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell{
+                updateDeSelectedCell(cell: cell)
+            }
         }
         
-        // emulate didselected
-        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-        
-        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            handleAudioActionForCell(cell: cell, playIndex: sender.tag)
-        }
+        let indexPath = IndexPath(row: sender.tag, section: 1)
+        handleAudioActionForTracks(tracks: User.shared.myMusic.tracks, playIndex: indexPath.row)
+    }
+    
+    func updateDeSelectedCell(cell:TrackTableViewCell){
+        cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -206,9 +234,15 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // stop the download task if it is still running because we mo more need this image as cell wont be visible
-        let track = User.shared.myMusic.tracks[indexPath.row]
-        self.imageDownloadTasks[track.artworkUrl100]?.cancel()
-        self.imageDownloadTasks.removeValue(forKey: track.artworkUrl100)
+        if User.shared.myMusic.tracks.count > 0 {
+            let track = User.shared.myMusic.tracks[indexPath.row]
+            if let downloadTask = self.imageDownloadTasks[track.artworkUrl100]{
+                if downloadTask.state == URLSessionTask.State.running {
+                    downloadTask.cancel()
+                }
+                self.imageDownloadTasks.removeValue(forKey: track.artworkUrl100)
+            }
+        }
     }
         
     /******************************* Collectionview section **********************************/
@@ -231,7 +265,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.lblSubtitle.text = track.artistName
         cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
         
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
             cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
         }else{
             cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
@@ -241,35 +275,17 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
         guard let cell = collectionView.cellForItem(at: indexPath) as? RecentCollectionViewCell else{
             return
         }
         
-        handleAudioActionForRecentCell(cell: cell, playIndex: indexPath.row)
+        handleAudioActionForTracks(tracks: User.shared.recentlyPlayed.tracks, playIndex: indexPath.row)
     }
-    
-    func handleAudioActionForRecentCell(cell:RecentCollectionViewCell,playIndex:Int) {
-        let tracks = User.shared.recentlyPlayed.tracks
-        let track = tracks[playIndex]
-        
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack() {
-            if track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
-                AudioPlayer.shared.pause()
-                // update cell UI and change button to play
-                cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-            }else{
-                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-                // update cell UI and change button to pause
-                cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
-            }
-        }else{
-            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-            cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
-        }
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        print("didDeselectItemAt")
+        
         if let cell = collectionView.cellForItem(at: indexPath) as? RecentCollectionViewCell {
             cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
         }
@@ -296,5 +312,4 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
     }
-
 }

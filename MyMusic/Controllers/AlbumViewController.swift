@@ -37,6 +37,9 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var lblTitleAlbum: UILabel!
     @IBOutlet weak var TopConstraintTableView: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    
+    lazy var imageDownloadTasks:[String:URLSessionTask] = [:]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,9 +51,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.navigationController?.navigationBar.isHidden = true
         
-        if let downloadTask = self.imgAlbum.setImageWithUrl(urlStr: album.artworkUrl100, placeHolderImageName: "iconMusic") {
-//            self.image
-        }
+        self.imgAlbum.setImageWithUrl(urlStr: album.artworkUrl100, placeHolderImageName: "iconMusic")
         
         lblTitleAlbum.text = album.name
         lblSubtitleAlbum.text = album.artistName
@@ -63,10 +64,25 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return
         }
 
-        if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+        if AudioPlayer.shared.isPlaying{
             self.btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
         }else{
             self.btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+        }
+        
+        guard let tracks = album.tracks else{
+            return
+        }
+        
+        for (i,item) in tracks.enumerated() {
+            if nowPlaying.trackId == item.trackId {
+                
+                // select update
+                let indexPath = IndexPath(row: i, section: 0)
+                if let cell = tableView.cellForRow(at: indexPath){
+                    tableView.reloadRows(at: [indexPath], with: .none)
+                }
+            }
         }
     }
     
@@ -113,7 +129,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
         
         if let nowPlaying = AudioPlayer.shared.getNowPlaying(), album.name == nowPlaying.collectionName{
-            if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            if AudioPlayer.shared.isPlaying {
                 AudioPlayer.shared.pause()
             }else{
                 AudioPlayer.shared.play()
@@ -152,9 +168,11 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.lblSubTitle.text = track.collectionName
             cell.lblSubSubTitle.text = track.artistName
             
-            cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
+            if let downloadTask = cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic"){
+                self.imageDownloadTasks[track.artworkUrl100] == downloadTask
+            }
             
-            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
@@ -169,29 +187,26 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func btnPlayCellTapped(sender : UIButton){
-        let indexPath = IndexPath(row: sender.tag, section: 0)
-        
-        // // emulate deselectRow
+
+        // deselect update
         if let selectedIndexPath = tableView.indexPathForSelectedRow {
-            if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
-                prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-            }
             tableView.deselectRow(at: selectedIndexPath, animated: false)
+            if let cell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell{
+                updateDeSelectedCell(cell: cell)
+            }
         }
         
-        // emulate didselected
-        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        
         if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            handleAudioActionForCell(cell: cell, playIndex: sender.tag)
+            handleAudioActionForCell(cell: cell, playIndex: indexPath.row)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell else {
-            return
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+            handleAudioActionForCell(cell: cell, playIndex: indexPath.row)
         }
-        handleAudioActionForCell(cell: cell, playIndex: indexPath.row)
     }
     
     func handleAudioActionForCell(cell:TrackTableViewCell,playIndex:Int) {
@@ -200,25 +215,31 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         let track = tracks[playIndex]
         
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack() {
-            if track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 AudioPlayer.shared.pause()
-                // update cell UI and change button to play
-                cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-            }else{
-                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-                // update cell UI and change button to pause
-                cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
-            }
         }else{
             AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-            cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
         }
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // stop the download task if it is still running because we mo more need this image as cell wont be visible
+        let track = self.album.tracks![indexPath.row]
+        if let downloadTask = self.imageDownloadTasks[track.artworkUrl100]{
+            if downloadTask.state == URLSessionTask.State.running {
+                downloadTask.cancel()
+            }
+            self.imageDownloadTasks.removeValue(forKey: track.artworkUrl100)
+        }
+    }
+    
+    func updateDeSelectedCell(cell:TrackTableViewCell){
+        cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+    }
+    
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-            cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell{
+            updateDeSelectedCell(cell: cell)
         }
     }
     

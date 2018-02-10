@@ -61,7 +61,7 @@ class NowPlayingView: UIView,UIGestureRecognizerDelegate {
             self.lblTitle.text = nowPlaying.trackName
             self.lblSubtitle.text = nowPlaying.artistName
             
-            if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            if AudioPlayer.shared.isPlaying == true {
                 btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
             }else{
                 btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
@@ -78,7 +78,7 @@ class NowPlayingView: UIView,UIGestureRecognizerDelegate {
             return
         }
         
-        if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+        if AudioPlayer.shared.isPlaying{
             AudioPlayer.shared.pause()
         }else{
             AudioPlayer.shared.play()

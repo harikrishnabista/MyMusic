@@ -50,7 +50,7 @@ class Track: NSObject, Codable {
     
     var rating:Double?
     var playCount:Int?
-    var isPlaying:Bool?
+//    var isPlaying:Bool?
     var isMyMusic:Bool?
     var recentlyPlayedDate:Date?
 

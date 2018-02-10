@@ -35,8 +35,8 @@ class AlbumDataParser {
                 for item in tracks{
                     item.rating = 0.0
                     item.playCount = 0
-                    item.isPlaying = false
-                    item.isMyMusic = false 
+//                    item.isPlaying = false
+                    item.isMyMusic = false
                 }
                 
                 return tracks

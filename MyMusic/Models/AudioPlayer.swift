@@ -42,6 +42,12 @@ class AudioPlayer {
         }
     }
     
+    var isPlaying:Bool {
+        get {
+            return self.avPlayer.isPlaying
+        }
+    }
+    
     func updateSeekTime(seekTime:Float) {
         avPlayer.seek(to: CMTimeMake(Int64(seekTime), 1))
         if avPlayer.rate == 0{
@@ -98,7 +104,7 @@ class AudioPlayer {
         // as soon as it starts playing add to recently playlist
         if let currentTrack = playerMetaData.getCurrentTrack(){
             currentTrack.playCount =  currentTrack.playCount ?? 0 + 1
-            currentTrack.isPlaying = true
+//            currentTrack.isPlaying = true
             currentTrack.recentlyPlayedDate = Date()
             User.shared.recentlyPlayed.addToList(track: currentTrack)
             
@@ -114,9 +120,9 @@ class AudioPlayer {
         // update UI
         print("playing finished.")
         
-        if let currentTrack = playerMetaData.getCurrentTrack(){
-            currentTrack.isPlaying = false
-        }
+//        if let currentTrack = playerMetaData.getCurrentTrack(){
+//            currentTrack.isPlaying = false
+//        }
         
         playNext()
     }
@@ -125,8 +131,8 @@ class AudioPlayer {
         avPlayer.pause()
         
         // change playing status 
-        playerMetaData.getCurrentTrack()?.isPlaying = false
-        playerMetaData.getCurrentTrack()?.isPlaying = false
+//        playerMetaData.getCurrentTrack()?.isPlaying = false
+//        playerMetaData.getCurrentTrack()?.isPlaying = false
         
         postNowPlayingUpdatedNotification()
     }

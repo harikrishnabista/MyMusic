@@ -47,7 +47,7 @@ class PlayerViewController: UIViewController {
             btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
         }
         
-        if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+        if AudioPlayer.shared.isPlaying {
             btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
         }else{
             btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
@@ -69,6 +69,12 @@ class PlayerViewController: UIViewController {
         
         let secondsSeekTime = Int(AudioPlayer.shared.getDurationOfNowPlayingInSeconds())
         lblTotalTime.text = StopWatch(totalSeconds: secondsSeekTime).simpleTimeString
+        
+        if let isMyMusic = nowPlaying.isMyMusic, isMyMusic == true {
+            btnLike.setImage(UIImage(named:"iconLikeFilled"), for: .normal)
+        }else{
+            btnLike.setImage(UIImage(named:"iconLike"), for: .normal)
+        }
     }
     
     @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
@@ -157,17 +163,11 @@ class PlayerViewController: UIViewController {
     }
     @IBOutlet weak var btnPlay: UIButton!
     @IBAction func btnPlayTapped(_ sender: Any) {
-
-        guard let nowPlaying = self.nowPlaying else {
-            return
-        }
-        
-        if let isPlaying = nowPlaying.isPlaying, isPlaying == false {
-            AudioPlayer.shared.play()
-        }else{
+        if AudioPlayer.shared.isPlaying {
             AudioPlayer.shared.pause()
+        }else{
+            AudioPlayer.shared.play()
         }
-        
     }
     
     @IBAction func btnPrevTapped(_ sender: Any) {
