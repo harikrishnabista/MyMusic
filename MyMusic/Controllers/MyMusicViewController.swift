@@ -75,20 +75,20 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         label.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
         // add shuffle button in right of headerview
-        let btnShuffle = UIButton()
-        headerView.addSubview(btnShuffle)
-        btnShuffle.translatesAutoresizingMaskIntoConstraints = false
+//        let btnShuffle = UIButton()
+//        headerView.addSubview(btnShuffle)
+//        btnShuffle.translatesAutoresizingMaskIntoConstraints = false
 //        btnShuffle.tintColor = UIColor.gre
         
-        let rightBtnShuffle = btnShuffle.rightAnchor.constraint(equalTo:headerView.rightAnchor)
-        rightBtnShuffle.isActive = true
-        rightBtnShuffle.constant = -15
-        
-        btnShuffle.centerYAnchor.constraint(equalTo:headerView.centerYAnchor).isActive = true
-        btnShuffle.setImage(UIImage(named:"iconShuffleGreen"), for: .normal)
-        
-        btnShuffle.tag = section
-        btnShuffle.addTarget(self, action: #selector(MyMusicViewController.btnShuffleTapped(sender:)), for: .touchUpInside)
+//        let rightBtnShuffle = btnShuffle.rightAnchor.constraint(equalTo:headerView.rightAnchor)
+//        rightBtnShuffle.isActive = true
+//        rightBtnShuffle.constant = -15
+//
+//        btnShuffle.centerYAnchor.constraint(equalTo:headerView.centerYAnchor).isActive = true
+//        btnShuffle.setImage(UIImage(named:"iconShuffleGreen"), for: .normal)
+//
+//        btnShuffle.tag = section
+//        btnShuffle.addTarget(self, action: #selector(MyMusicViewController.btnShuffleTapped(sender:)), for: .touchUpInside)
 
         headerView.layoutIfNeeded();
         
@@ -133,6 +133,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
                 cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
             }

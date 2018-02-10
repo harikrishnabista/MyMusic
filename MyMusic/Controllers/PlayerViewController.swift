@@ -31,6 +31,8 @@ class PlayerViewController: UIViewController {
         viewContainerBuy.layer.borderWidth = 1.0
         viewContainerBuy.layer.cornerRadius = 4.0
         viewContainerBuy.layer.borderColor = UIColor.lightText.cgColor
+        
+        slider.addTarget(self, action: #selector(onSliderValChanged(slider:event:)), for: .valueChanged)
     }
     
     func updateUI() {
@@ -61,10 +63,40 @@ class PlayerViewController: UIViewController {
         
         lblCollectionPrice.text = nowPlaying.getCollectionPriceLabel()
         lblTrackPrice.text = nowPlaying.getTrackPriceLabel()
+        
+        let secondsInt = Int(AudioPlayer.shared.getSeekTimeInSeconds())
+        lblSeekTime.text = StopWatch(totalSeconds: secondsInt).simpleTimeString
+        
+        let secondsSeekTime = Int(AudioPlayer.shared.getDurationOfNowPlayingInSeconds())
+        lblTotalTime.text = StopWatch(totalSeconds: secondsSeekTime).simpleTimeString
+    }
+    
+    @objc func onSliderValChanged(slider: UISlider, event: UIEvent) {
+        if let touchEvent = event.allTouches?.first {
+            switch touchEvent.phase {
+                
+            case .moved:
+                let seconds = Int(slider.value * AudioPlayer.shared.getDurationOfNowPlayingInSeconds())
+                lblSeekTime.text = StopWatch(totalSeconds: seconds).simpleTimeString
+            case .ended:
+                let seekTime = self.slider.value * AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+                AudioPlayer.shared.updateSeekTime(seekTime: seekTime)
+            default:
+                break
+            }
+        }
     }
     
     @objc func nowPlayingSeekTimeUpdated() {
-        slider.value = AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+        
+        if slider.isTracking  {
+            print("do not update the slider now")
+        }else{
+            slider.value = AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+        }
+        
+        let secondsInt = Int(AudioPlayer.shared.getSeekTimeInSeconds())
+        lblSeekTime.text = StopWatch(totalSeconds: secondsInt).simpleTimeString
     }
     
     @objc func nowPlayingUpdated() {

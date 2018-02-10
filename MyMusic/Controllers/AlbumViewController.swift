@@ -32,6 +32,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var imgAlbum: UIImageView!
     var album:Album!
     
+    @IBOutlet weak var btnPlay: UIButton!
     @IBOutlet weak var lblSubtitleAlbum: UILabel!
     @IBOutlet weak var lblTitleAlbum: UILabel!
     @IBOutlet weak var TopConstraintTableView: NSLayoutConstraint!
@@ -41,6 +42,9 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // subscribe for the AudioPlayer nowplaying updated
+        NotificationCenter.default.addObserver(self, selector: #selector(NowPlayingView.nowPlayingUpdated), name: NSNotification.Name(rawValue: Constants.NotificationName.NOW_PLAYING_UPDATED), object: nil)
         
         self.navigationController?.navigationBar.isHidden = true
         
@@ -52,6 +56,18 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
         lblSubtitleAlbum.text = album.artistName
 
         downloadAlbumDetail()
+    }
+    
+    @objc func nowPlayingUpdated() {
+        guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
+            return
+        }
+
+        if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+            self.btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
+        }else{
+            self.btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -95,32 +111,34 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
-//        openPlayerWithTrack(playIndex: nil)
         
-//        let indexPath = IndexPath(row: 0, section: 0)
-//        let playIndex = indexPath.row
-//
-//        // // emulate deselectRow
-//        if let selectedIndexPath = tableView.indexPathForSelectedRow {
-//            if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
-//                prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
-//            }
-//            tableView.deselectRow(at: selectedIndexPath, animated: false)
-//        }
-//
-//        // emulate didselected
-//        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-//
-//        if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
-//            handleAudioActionForCell(cell: cell, playIndex: playIndex)
-//        }
-        
+        if let nowPlaying = AudioPlayer.shared.getNowPlaying(), album.name == nowPlaying.collectionName{
+            if let isPlaying = nowPlaying.isPlaying, isPlaying == true {
+                AudioPlayer.shared.pause()
+            }else{
+                AudioPlayer.shared.play()
+            }
+        }else{
+            // if it does not have any items playing then play first item in the album
+            // // emulate deselectRow
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                if let prevSelCell = tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
+                    prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+                }
+                tableView.deselectRow(at: selectedIndexPath, animated: false)
+            }
+            
+            // emulate didselected
+            let playIndex = 0
+            let indexPath = IndexPath(row: playIndex, section: 0)
+            tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+            
+            if let cell = tableView.cellForRow(at: indexPath) as? TrackTableViewCell {
+                handleAudioActionForCell(cell: cell, playIndex: playIndex)
+            }
+        }
     }
-    
-//    func openPlayerWithTrack(playIndex:Int?) {
-//
-//    }
-//
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "TrackTableViewCell", for: indexPath) as! TrackTableViewCell
@@ -138,6 +156,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, let isPlaying = nowPlaying.isPlaying, isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
                 cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
             }

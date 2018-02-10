@@ -10,6 +10,7 @@
 		568893FA202BFE1F00012937 /* NowPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568893F9202BFE1F00012937 /* NowPlayingView.swift */; };
 		568893FE202BFE4B00012937 /* NowPlaying.xib in Resources */ = {isa = PBXBuildFile; fileRef = 568893FD202BFE4B00012937 /* NowPlaying.xib */; };
 		56889400202C034E00012937 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568893FF202C034E00012937 /* MainViewController.swift */; };
+		56889451202E6BDC00012937 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56889450202E6BDC00012937 /* StopWatch.swift */; };
 		56D934162027ABE900D10A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934152027ABE900D10A94 /* AppDelegate.swift */; };
 		56D9341B2027ABE900D10A94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D934192027ABE900D10A94 /* Main.storyboard */; };
 		56D9341D2027ABE900D10A94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9341C2027ABE900D10A94 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		568893F9202BFE1F00012937 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
 		568893FD202BFE4B00012937 /* NowPlaying.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NowPlaying.xib; sourceTree = "<group>"; };
 		568893FF202C034E00012937 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		56889450202E6BDC00012937 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
 		56D934122027ABE900D10A94 /* MyMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D934152027ABE900D10A94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D9341A2027ABE900D10A94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				56D9343F2027B79C00D10A94 /* Constants.swift */,
 				56D934422027B79C00D10A94 /* Extensions.swift */,
 				56D934402027B79C00D10A94 /* GlobalCache.swift */,
+				56889450202E6BDC00012937 /* StopWatch.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -221,6 +224,11 @@
 					56D934112027ABE900D10A94 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -268,6 +276,7 @@
 				56D9342C2027AC9700D10A94 /* HomeViewController.swift in Sources */,
 				56D9343A2027ADDB00D10A94 /* MyMusic.swift in Sources */,
 				56D9342E2027ACE700D10A94 /* MyMusicViewController.swift in Sources */,
+				56889451202E6BDC00012937 /* StopWatch.swift in Sources */,
 				56D9346120284A5D00D10A94 /* AlbumCollectionDataParser.swift in Sources */,
 				56889400202C034E00012937 /* MainViewController.swift in Sources */,
 				56D934302027ACFE00D10A94 /* BrowseViewController.swift in Sources */,

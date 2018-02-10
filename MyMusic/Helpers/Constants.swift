@@ -18,5 +18,4 @@ class Constants: NSObject {
         public static let NOW_PLAYING_UPDATED = "com.mymusic.nowplayingupdated"
         public static let NOW_PLAYING_SEEK_TIME_UPDATED = "com.mymusic.seektimeupdated"
     }
-
 }

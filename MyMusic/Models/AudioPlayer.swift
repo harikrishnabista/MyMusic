@@ -27,7 +27,6 @@ class AudioPlayer {
     
 //    var delegate:AudioPlayerMetaUpdatable?
 
-    
     public static var shared = AudioPlayer()
     var playerMetaData:PlayerMetaData = PlayerMetaData()
     var avPlayer:AVPlayer = AVPlayer()
@@ -43,9 +42,8 @@ class AudioPlayer {
         }
     }
     
-    func updateSeekTime(seconds:Int64) {
-        let targetTime:CMTime = CMTimeMake(seconds, 1)
-        avPlayer.seek(to: targetTime)
+    func updateSeekTime(seekTime:Float) {
+        avPlayer.seek(to: CMTimeMake(Int64(seekTime), 1))
         if avPlayer.rate == 0{
             avPlayer.play()
         }
@@ -91,9 +89,9 @@ class AudioPlayer {
     }
     
     func play() {
+    
         NotificationCenter.default.addObserver(self, selector: #selector(AudioPlayer.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: avPlayer.currentItem)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(AudioPlayer.playerDidFinishPlaying(sender:)), name: NSNotification.Name.AVPlayerItems, object: avPlayer.currentItem)
         
         avPlayer.play()
         
@@ -134,17 +132,31 @@ class AudioPlayer {
     }
     
     func playNext(){
-        if let nextTrack = playerMetaData.getNextTrack(){
-            prepareToPlay(track: nextTrack)
-            play()
-        }
+        
+//        let queue = DispatchQueue(label: "", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        
+//        let workItem = DispatchWorkItem {
+            if let nextTrack = self.playerMetaData.getNextTrack(){
+                self.prepareToPlay(track: nextTrack)
+                self.play()
+            }
+//        }
+        
+//        queue.async(execute: workItem)
     }
     
     func playPrev(){
-        if let prevTrack = playerMetaData.getPreviousTrack(){
-            prepareToPlay(track: prevTrack)
-            play()
-        }
+        
+//        let queue = DispatchQueue(label: "", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        
+//        let workItem = DispatchWorkItem {
+            if let prevTrack = self.playerMetaData.getPreviousTrack(){
+                self.prepareToPlay(track: prevTrack)
+                self.play()
+            }
+//        }
+        
+//        queue.async(execute: workItem)
     }
     
     func stop(){
