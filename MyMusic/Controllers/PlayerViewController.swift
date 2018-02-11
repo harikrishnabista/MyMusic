@@ -11,7 +11,7 @@ import AVFoundation
 
 class PlayerViewController: UIViewController {
     
-    var playerMetaData:PlayerMetaData!
+    var playListManager:PlayListManager!
     var nowPlaying:Track?
 //    var avPlayer:AVPlayer?
 //    var avPlayerItem:AVPlayerItem?
@@ -37,7 +37,7 @@ class PlayerViewController: UIViewController {
     
     func updateUI() {
         
-        self.nowPlaying = self.playerMetaData.getCurrentTrack()
+        self.nowPlaying = self.playListManager.getCurrentTrack()
         
         guard let nowPlaying = self.nowPlaying else {
             return
@@ -56,7 +56,7 @@ class PlayerViewController: UIViewController {
         imgTrack.setImageWithUrl(urlStr: nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
         
         lblAlbumTitle.text = nowPlaying.collectionName
-        lblAlbumSubtitle.text = "\(playerMetaData.playList.count) tracks"
+        lblAlbumSubtitle.text = "\(playListManager.playList.count) tracks"
         
         lblTrackTitle.text = nowPlaying.trackName
         lblTrackSubTitle.text = nowPlaying.artistName
@@ -86,7 +86,11 @@ class PlayerViewController: UIViewController {
                 lblSeekTime.text = StopWatch(totalSeconds: seconds).simpleTimeString
             case .ended:
                 let seekTime = self.slider.value * AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
-                AudioPlayer.shared.updateSeekTime(seekTime: seekTime)
+                
+                AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+                    AudioPlayer.shared.updateSeekTime(seekTime: seekTime)
+                })
+                
             default:
                 break
             }
@@ -94,19 +98,22 @@ class PlayerViewController: UIViewController {
     }
     
     @objc func nowPlayingSeekTimeUpdated() {
-        
-        if slider.isTracking  {
-            print("do not update the slider now")
-        }else{
-            slider.value = AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+        DispatchQueue.main.async {
+            if self.slider.isTracking  {
+                print("do not update the slider now")
+            }else{
+                self.slider.value = AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds()
+            }
+            
+            let secondsInt = Int(AudioPlayer.shared.getSeekTimeInSeconds())
+            self.lblSeekTime.text = StopWatch(totalSeconds: secondsInt).simpleTimeString
         }
-        
-        let secondsInt = Int(AudioPlayer.shared.getSeekTimeInSeconds())
-        lblSeekTime.text = StopWatch(totalSeconds: secondsInt).simpleTimeString
     }
     
     @objc func nowPlayingUpdated() {
-        updateUI()
+        DispatchQueue.main.async {
+            self.updateUI()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -148,6 +155,12 @@ class PlayerViewController: UIViewController {
         }
     }
     
+//    func runInBackground(workItem:DispatchWorkItem) {
+//        let queue = DispatchQueue(label: "com.meroapp.mymusic.audioplayer", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+//
+//        queue.async(execute: workItem)
+//    }
+    
     @IBOutlet weak var lblTrackTitle: UILabel!
     @IBOutlet weak var lblTrackSubTitle: UILabel!
     
@@ -156,27 +169,35 @@ class PlayerViewController: UIViewController {
     
     // player controls
     @IBAction func btnNextTapped(_ sender: Any) {
-        AudioPlayer.shared.playNext()
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem {
+            AudioPlayer.shared.playNext()
+        })
     }
     
     @IBAction func btnRepeatTapped(_ sender: Any) {
     }
     @IBOutlet weak var btnPlay: UIButton!
     @IBAction func btnPlayTapped(_ sender: Any) {
-        if AudioPlayer.shared.isPlaying {
-            AudioPlayer.shared.pause()
-        }else{
-            AudioPlayer.shared.play()
-        }
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem {
+            if AudioPlayer.shared.isPlaying {
+                AudioPlayer.shared.pause()
+            }else{
+                AudioPlayer.shared.play()
+            }
+        })
     }
     
     @IBAction func btnPrevTapped(_ sender: Any) {
-        AudioPlayer.shared.playPrev()
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem {
+            AudioPlayer.shared.playPrev()
+        })
     }
     
     @IBOutlet weak var lblSeekTime: UILabel!
     @IBAction func btnShuffleTapped(_ sender: Any) {
-        AudioPlayer.shared.shuffle()
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem {
+            AudioPlayer.shared.shuffle()
+        })
     }
     @IBOutlet weak var lblTotalTime: UILabel!
     @IBOutlet weak var slider: UISlider!

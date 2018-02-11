@@ -11,6 +11,7 @@
 		568893FE202BFE4B00012937 /* NowPlaying.xib in Resources */ = {isa = PBXBuildFile; fileRef = 568893FD202BFE4B00012937 /* NowPlaying.xib */; };
 		56889400202C034E00012937 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 568893FF202C034E00012937 /* MainViewController.swift */; };
 		56889451202E6BDC00012937 /* StopWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56889450202E6BDC00012937 /* StopWatch.swift */; };
+		56889453203043A000012937 /* AlbumCollectionSearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56889452203043A000012937 /* AlbumCollectionSearchParser.swift */; };
 		56D934162027ABE900D10A94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934152027ABE900D10A94 /* AppDelegate.swift */; };
 		56D9341B2027ABE900D10A94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 56D934192027ABE900D10A94 /* Main.storyboard */; };
 		56D9341D2027ABE900D10A94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56D9341C2027ABE900D10A94 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 		568893FD202BFE4B00012937 /* NowPlaying.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NowPlaying.xib; sourceTree = "<group>"; };
 		568893FF202C034E00012937 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		56889450202E6BDC00012937 /* StopWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatch.swift; sourceTree = "<group>"; };
+		56889452203043A000012937 /* AlbumCollectionSearchParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionSearchParser.swift; sourceTree = "<group>"; };
 		56D934122027ABE900D10A94 /* MyMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56D934152027ABE900D10A94 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		56D9341A2027ABE900D10A94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -173,8 +175,8 @@
 			isa = PBXGroup;
 			children = (
 				56D9342B2027AC9700D10A94 /* HomeViewController.swift */,
-				56D9342D2027ACE700D10A94 /* MyMusicViewController.swift */,
 				56D9342F2027ACFE00D10A94 /* BrowseViewController.swift */,
+				56D9342D2027ACE700D10A94 /* MyMusicViewController.swift */,
 				56D9345A2028389200D10A94 /* AlbumViewController.swift */,
 				56D934312027AD2800D10A94 /* PlayerViewController.swift */,
 				568893FF202C034E00012937 /* MainViewController.swift */,
@@ -187,6 +189,7 @@
 			children = (
 				56D934542028119B00D10A94 /* AlbumDataParser.swift */,
 				56D9346020284A5D00D10A94 /* AlbumCollectionDataParser.swift */,
+				56889452203043A000012937 /* AlbumCollectionSearchParser.swift */,
 			);
 			path = DataParsers;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				56D934382027ADAB00D10A94 /* AudioPlayer.swift in Sources */,
 				56D9343E2027AE0500D10A94 /* AlbumCollection.swift in Sources */,
 				56D934322027AD2800D10A94 /* PlayerViewController.swift in Sources */,
+				56889453203043A000012937 /* AlbumCollectionSearchParser.swift in Sources */,
 				56D934452027B79C00D10A94 /* ApiCaller.swift in Sources */,
 				56D934462027B79C00D10A94 /* Extensions.swift in Sources */,
 				56D93459202812AE00D10A94 /* LoadingView.swift in Sources */,

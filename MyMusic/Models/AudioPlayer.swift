@@ -25,10 +25,16 @@ extension AVPlayer {
 
 class AudioPlayer {
     
+    func runInBackground(workItem:DispatchWorkItem) {
+        let queue = DispatchQueue(label: "com.meroapp.mymusic.audioplayer", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        
+        queue.async(execute: workItem)
+    }
+    
 //    var delegate:AudioPlayerMetaUpdatable?
 
     public static var shared = AudioPlayer()
-    var playerMetaData:PlayerMetaData = PlayerMetaData()
+    var playListManager:PlayListManager = PlayListManager()
     var avPlayer:AVPlayer = AVPlayer()
     
     var seekTime: Float64 = 0.0
@@ -61,7 +67,7 @@ class AudioPlayer {
     
     func getDurationOfNowPlayingInSeconds() -> Float{
         
-        if let currentTrack = playerMetaData.getCurrentTrack(){
+        if let currentTrack = playListManager.getCurrentTrack(){
             return Float(currentTrack.trackTimeMillis/1000)
         }
         
@@ -75,15 +81,15 @@ class AudioPlayer {
     
     func prepareToPlay(track:Track){
         
-        if playerMetaData.playIndex == playerMetaData.playList.count - 1 {
+        if playListManager.playIndex == playListManager.playList.count - 1 {
             // update UI with no next available
         }
         
-        if playerMetaData.playIndex == 0 {
+        if playListManager.playIndex == 0 {
             // update UI for no previous available
         }
         
-        if playerMetaData.playList.count == 1 {
+        if playListManager.playList.count == 1 {
             // update UI for no previous available
             // update UI with no next available
         }
@@ -102,7 +108,7 @@ class AudioPlayer {
         avPlayer.play()
         
         // as soon as it starts playing add to recently playlist
-        if let currentTrack = playerMetaData.getCurrentTrack(){
+        if let currentTrack = playListManager.getCurrentTrack(){
             currentTrack.playCount =  currentTrack.playCount ?? 0 + 1
 //            currentTrack.isPlaying = true
             currentTrack.recentlyPlayedDate = Date()
@@ -120,7 +126,7 @@ class AudioPlayer {
         // update UI
         print("playing finished.")
         
-//        if let currentTrack = playerMetaData.getCurrentTrack(){
+//        if let currentTrack = playListManager.getCurrentTrack(){
 //            currentTrack.isPlaying = false
 //        }
         
@@ -131,8 +137,8 @@ class AudioPlayer {
         avPlayer.pause()
         
         // change playing status 
-//        playerMetaData.getCurrentTrack()?.isPlaying = false
-//        playerMetaData.getCurrentTrack()?.isPlaying = false
+//        playListManager.getCurrentTrack()?.isPlaying = false
+//        playListManager.getCurrentTrack()?.isPlaying = false
         
         postNowPlayingUpdatedNotification()
     }
@@ -142,7 +148,7 @@ class AudioPlayer {
 //        let queue = DispatchQueue(label: "", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         
 //        let workItem = DispatchWorkItem {
-            if let nextTrack = self.playerMetaData.getNextTrack(){
+            if let nextTrack = self.playListManager.getNextTrack(){
                 self.prepareToPlay(track: nextTrack)
                 self.play()
             }
@@ -156,7 +162,7 @@ class AudioPlayer {
 //        let queue = DispatchQueue(label: "", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         
 //        let workItem = DispatchWorkItem {
-            if let prevTrack = self.playerMetaData.getPreviousTrack(){
+            if let prevTrack = self.playListManager.getPreviousTrack(){
                 self.prepareToPlay(track: prevTrack)
                 self.play()
             }
@@ -179,8 +185,8 @@ class AudioPlayer {
             return
         }
         
-        playerMetaData.setPlayList(newPlayList: newPlayList, playIndex: playIndex)
-        if let currentTrack = playerMetaData.getCurrentTrack() {
+        playListManager.setPlayList(newPlayList: newPlayList, playIndex: playIndex)
+        if let currentTrack = playListManager.getCurrentTrack() {
             prepareToPlay(track: currentTrack)
             play()
         }
@@ -191,17 +197,17 @@ class AudioPlayer {
             return
         }
         
-        playerMetaData.setPlayList(newPlayList: newPlayList)
+        playListManager.setPlayList(newPlayList: newPlayList)
         
-        if let currentTrack = playerMetaData.getCurrentTrack() {
+        if let currentTrack = playListManager.getCurrentTrack() {
             prepareToPlay(track: currentTrack)
             play()
         }
     }
     
     func shuffle(){
-        playerMetaData.shuffle()
-        if let currentTrack = playerMetaData.getCurrentTrack() {
+        playListManager.shuffle()
+        if let currentTrack = playListManager.getCurrentTrack() {
             prepareToPlay(track: currentTrack)
             play()
         }
@@ -212,11 +218,11 @@ class AudioPlayer {
     }
     
     func getNowPlaying() -> Track? {
-        return self.playerMetaData.getCurrentTrack()
+        return self.playListManager.getCurrentTrack()
     }
 }
 
-class PlayerMetaData {
+class PlayListManager {
     var volume:Float = 0.0
     var isRepeat:Bool = false
     
@@ -248,20 +254,32 @@ class PlayerMetaData {
 
     func getNextTrack() -> Track? {
         
+        guard playList.count > 0 else {
+            return nil
+        }
+        
         if playIndex + 1 < playList.count {
             playIndex = playIndex + 1
             return playList[playIndex]
+        }else{
+            playIndex = 0
+            return playList[playIndex]
         }
-        return nil
     }
     
     func getPreviousTrack() -> Track? {
+        
+        guard playList.count > 0 else {
+            return nil
+        }
+        
         if playIndex > 1 {
             playIndex = playIndex - 1
             return playList[playIndex]
+        }else{
+            playIndex = playList.count - 1
+            return playList[playIndex]
         }
-        
-        return nil
     }
     
     func getCurrentTrack() -> Track? {

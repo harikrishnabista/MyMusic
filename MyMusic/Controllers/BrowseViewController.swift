@@ -8,13 +8,15 @@
 
 import UIKit
 
-class BrowseViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class BrowseViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
     lazy var imageDownloadTasks:[String:URLSessionTask] = [:]
     
     var albumCollection:AlbumCollection?
     private static let COLL_REUSE_IDENTIFIER = "BrowseItemCollectionViewCell"
 
+    @IBOutlet weak var HeightOfSearchBar: NSLayoutConstraint!
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +26,32 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         if self.albumCollection == nil {
             downloadTopAlbums()
         }
+
+        let btnSearch = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(BrowseViewController.btnSearchTapped(sender:)))
         
+        btnSearch.tintColor = UIColor.init(red: 0, green: 179/255, blue: 26/255, alpha: 1.0)
+        
+        self.parent?.parent?.navigationItem.rightBarButtonItem = btnSearch
+        
+        self.HeightOfSearchBar.constant = 0
+        
+        self.searchBar.delegate = self
+    }
+    
+    @objc func btnSearchTapped(sender:UIButton){
+        if self.HeightOfSearchBar.constant == 0 {
+            self.HeightOfSearchBar.constant = 50
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
+            
+        }else{
+            self.searchBar.resignFirstResponder()
+            self.HeightOfSearchBar.constant = 0
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
     }
     
     func downloadTopAlbums() {
@@ -104,7 +131,7 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         let width = collectionView.bounds.size.width - 10
         
-        return CGSize(width: width, height: width/4)
+        return CGSize(width: width, height: 256.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -129,6 +156,38 @@ class BrowseViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         print("memory warning triggered")
+    }
+    
+    // search bar delegate
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        print(searchBar.text)
+        
+        self.searchBar.resignFirstResponder()
+        
+//        guard let searchKey = searchBar.text, searchKey.isEmpty == false else {
+//            return
+//        }
+//
+//        guard let url = URL(string: Constants.SEARCH_API + "\(searchKey)&entity=album") else {
+//            return
+//        }
+//
+//        self.navigationController?.view.showLoading(message: "Loading top albums...")
+//
+//        ApiCaller().getDataFromUrl(url: url) { (data, resp, err) in
+//
+//            DispatchQueue.main.async {
+//
+//                self.navigationController?.view.hideLoading()
+//
+//                self.albumCollection = AlbumCollectionSearchParser().parseAlbumCollection(data: data, resp: resp, err: err)
+//                self.collectionView.reloadData()
+//
+//                if let homeViewController = self.parent?.parent as? HomeViewController {
+//                    homeViewController.albumCollection = self.albumCollection
+//                }
+//            }
+//        }
     }
 
 }

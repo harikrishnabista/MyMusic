@@ -3,10 +3,18 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "AlbumViewController.tableView(_:numberOfRowsInSection:):AlbumViewController.swift">
+         contextName = "closure #1 in AlbumViewController.downloadAlbumDetail():AlbumViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "album">
+               value = "self.album">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PlayerViewController.btnLikeTapped(_:):PlayerViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "player.nowPlaying.isFavorite">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -19,10 +27,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "AlbumDataParser.parseAlbum(data:resp:err:):AlbumDataParser.swift">
+         contextName = "AlbumViewController.tableView(_:numberOfRowsInSection:):AlbumViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "jsonData?.value(forKey: &quot;results&quot;) as? NSDictionary">
+               value = "album">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in BrowseViewController.searchBarSearchButtonClicked(_:):BrowseViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "albumCollection">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -38,18 +54,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "PlayerViewController.btnLikeTapped(_:):PlayerViewController.swift">
+         contextName = "AlbumDataParser.parseAlbum(data:resp:err:):AlbumDataParser.swift">
          <PersistentStrings>
             <PersistentString
-               value = "player.nowPlaying.isFavorite">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in AlbumViewController.downloadAlbumDetail():AlbumViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.album">
+               value = "jsonData?.value(forKey: &quot;results&quot;) as? NSDictionary">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

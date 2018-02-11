@@ -44,37 +44,37 @@ class NowPlayingView: UIView,UIGestureRecognizerDelegate {
     }
 
     @objc func nowPlayingSeekTimeUpdated() {
-
-        if let nowPlaying = AudioPlayer.shared.getNowPlaying() {
-            
-            progressBar.setProgress(AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds(), animated: true)
+        DispatchQueue.main.async {
+            if AudioPlayer.shared.getNowPlaying() != nil {   
+                self.progressBar.setProgress(AudioPlayer.shared.getSeekTimeInSeconds()/AudioPlayer.shared.getDurationOfNowPlayingInSeconds(), animated: true)
+            }
         }
     }
     
     @objc func nowPlayingUpdated() {
-        
-        if self.isHidden == true {
-            self.isHidden = false
-        }
-        
-        if let nowPlaying = AudioPlayer.shared.getNowPlaying() {
-            self.lblTitle.text = nowPlaying.trackName
-            self.lblSubtitle.text = nowPlaying.artistName
-            
-            if AudioPlayer.shared.isPlaying == true {
-                btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
-            }else{
-                btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+        DispatchQueue.main.async {
+            if self.isHidden == true {
+                self.isHidden = false
             }
             
-            self.imgTrack.setImageWithUrl(urlStr: nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
-            
+            if let nowPlaying = AudioPlayer.shared.getNowPlaying() {
+                self.lblTitle.text = nowPlaying.trackName
+                self.lblSubtitle.text = nowPlaying.artistName
+                
+                if AudioPlayer.shared.isPlaying == true {
+                    self.btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
+                }else{
+                    self.btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+                }
+                
+                self.imgTrack.setImageWithUrl(urlStr: nowPlaying.artworkUrl100, placeHolderImageName: "iconMusic")
+            }
         }
     }
     
     @IBAction func btnPlayTapped(_ sender: Any) {
         
-        guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
+        guard AudioPlayer.shared.getNowPlaying() != nil else {
             return
         }
         
@@ -108,13 +108,13 @@ class NowPlayingView: UIView,UIGestureRecognizerDelegate {
     
     @objc func pageTapped(sender: UITapGestureRecognizer?) {
         
-        guard let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack() else {
+        guard AudioPlayer.shared.playListManager.getCurrentTrack() != nil else {
             return
         }
         
         if let playerViewCon = self.navController?.storyboard?.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController {
             
-            playerViewCon.playerMetaData = AudioPlayer.shared.playerMetaData
+            playerViewCon.playListManager = AudioPlayer.shared.playListManager
             playerViewCon
             
             self.navController?.present(playerViewCon, animated: true, completion: nil)

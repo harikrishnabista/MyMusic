@@ -33,39 +33,43 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // subscribe for the AudioPlayer nowplaying updated
         NotificationCenter.default.addObserver(self, selector: #selector(NowPlayingView.nowPlayingUpdated), name: NSNotification.Name(rawValue: Constants.NotificationName.NOW_PLAYING_UPDATED), object: nil)
+        
+        self.parent?.parent?.navigationItem.rightBarButtonItem = nil
     }
     
     @objc func nowPlayingUpdated() {
-        guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
-            return
-        }
-        
-        // for my music
-        for (i,item) in User.shared.myMusic.tracks.enumerated() {
-            if nowPlaying.trackId == item.trackId {
-                // update uitableviewcell for now playing
-                let indexPath = IndexPath(row: i, section: 1)
-                if let cell = tableView.cellForRow(at: indexPath){
-                    tableView.reloadRows(at: [indexPath], with: .none)
-                }
-                break
+        DispatchQueue.main.async {
+            guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
+                return
             }
+            
+            // for my music
+            for (i,item) in User.shared.myMusic.tracks.enumerated() {
+                if nowPlaying.trackId == item.trackId {
+                    // update uitableviewcell for now playing
+                    let indexPath = IndexPath(row: i, section: 1)
+                    if self.tableView.cellForRow(at: indexPath) != nil{
+                        self.tableView.reloadRows(at: [indexPath], with: .none)
+                    }
+                    break
+                }
+            }
+            
+            // for recently played music
+            
+            if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? RecentTableViewCell{
+                //                    cell.collectionView.reloadItems(at: [IndexPath(row: i, section: 0)])
+                cell.collectionView.reloadData()
+            }
+            
+            //        for (i,item) in User.shared.recentlyPlayed.tracks.enumerated() {
+            //            if nowPlaying.trackId == item.trackId {
+            //                // update uicollectionviewcell for now playing
+            //
+            //                break
+            //            }
+            //        }
         }
-        
-        // for recently played music
-        
-        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? RecentTableViewCell{
-            //                    cell.collectionView.reloadItems(at: [IndexPath(row: i, section: 0)])
-            cell.collectionView.reloadData()
-        }
-        
-//        for (i,item) in User.shared.recentlyPlayed.tracks.enumerated() {
-//            if nowPlaying.trackId == item.trackId {
-//                // update uicollectionviewcell for now playing
-//
-//                break
-//            }
-//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -132,7 +136,9 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @objc func btnShuffleTapped(sender : UIButton){
-        AudioPlayer.shared.setPlaylist(newPlayList: User.shared.myMusic.tracks, playIndex: sender.tag)
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+            AudioPlayer.shared.setPlaylist(newPlayList: User.shared.myMusic.tracks, playIndex: sender.tag)
+        })
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -169,7 +175,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.imageDownloadTasks[track.artworkUrl100] == downloadTask
             }
             
-            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+            if let nowPlaying = AudioPlayer.shared.playListManager.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
@@ -200,10 +206,16 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let track = tracks[playIndex]
         
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
-            AudioPlayer.shared.pause()
+        if let nowPlaying = AudioPlayer.shared.playListManager.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+            
+            AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+                AudioPlayer.shared.pause()
+            })
+        
         }else{
-            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
+            AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
+            })
         }
     }
     
@@ -265,7 +277,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.lblSubtitle.text = track.artistName
         cell.imgTrack.setImageWithUrl(urlStr: track.artworkUrl100, placeHolderImageName: "iconMusic")
         
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+        if let nowPlaying = AudioPlayer.shared.playListManager.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
             cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
         }else{
             cell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
@@ -275,7 +287,7 @@ class MyMusicViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? RecentCollectionViewCell else{
+        guard (collectionView.cellForItem(at: indexPath) as? RecentCollectionViewCell) != nil else{
             return
         }
         

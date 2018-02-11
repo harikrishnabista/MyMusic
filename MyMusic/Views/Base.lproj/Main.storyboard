@@ -37,9 +37,6 @@
                                 <action selector="segControlValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="2CJ-py-Avb"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="search" id="5eb-9K-Ccz">
-                            <color key="tintColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="segControl" destination="DmQ-ZV-xlP" id="y7C-wp-r2N"/>
@@ -289,8 +286,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="LnV-Wb-blV">
+                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.70196078429999997" blue="0.1019607843" alpha="0.34157680460000001" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="JYd-AM-z97"/>
+                                </constraints>
+                                <color key="tintColor" red="0.0" green="0.70196078429999997" blue="0.1019607843" alpha="0.34157680460000001" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.0" green="0.70196078429999997" blue="0.1019607843" alpha="0.34157680457746481" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                            </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hxo-DR-wqE">
-                                <rect key="frame" x="10" y="20" width="355" height="647"/>
+                                <rect key="frame" x="10" y="80" width="355" height="587"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FLe-0M-jz1">
                                     <size key="itemSize" width="168" height="145"/>
@@ -306,6 +313,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="168" height="145"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X6e-Dc-UZn">
+                                                    <rect key="frame" x="-94" y="-251" width="355" height="647"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </searchBar>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R2z-8v-Mgi">
                                                     <rect key="frame" x="0.0" y="0.0" width="168" height="145"/>
                                                     <subviews>
@@ -374,14 +386,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hxo-DR-wqE" firstAttribute="leading" secondItem="Sc2-He-bHi" secondAttribute="leading" constant="10" id="Lra-EI-kra"/>
-                            <constraint firstItem="hxo-DR-wqE" firstAttribute="top" secondItem="Sc2-He-bHi" secondAttribute="top" id="MxH-eb-cXn"/>
+                            <constraint firstItem="hxo-DR-wqE" firstAttribute="top" secondItem="LnV-Wb-blV" secondAttribute="bottom" constant="10" id="O9d-Me-8sy"/>
                             <constraint firstItem="Sc2-He-bHi" firstAttribute="bottom" secondItem="hxo-DR-wqE" secondAttribute="bottom" id="QS6-kv-wXK"/>
                             <constraint firstItem="Sc2-He-bHi" firstAttribute="trailing" secondItem="hxo-DR-wqE" secondAttribute="trailing" constant="10" id="f9z-pW-RdG"/>
+                            <constraint firstItem="LnV-Wb-blV" firstAttribute="leading" secondItem="Sc2-He-bHi" secondAttribute="leading" id="fIB-NP-HSw"/>
+                            <constraint firstItem="LnV-Wb-blV" firstAttribute="trailing" secondItem="Sc2-He-bHi" secondAttribute="trailing" id="qss-5b-hss"/>
+                            <constraint firstItem="LnV-Wb-blV" firstAttribute="top" secondItem="Sc2-He-bHi" secondAttribute="top" id="uvR-NQ-8Xw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Sc2-He-bHi"/>
                     </view>
                     <connections>
+                        <outlet property="HeightOfSearchBar" destination="JYd-AM-z97" id="vQY-KG-bK0"/>
                         <outlet property="collectionView" destination="hxo-DR-wqE" id="p5a-NM-41g"/>
+                        <outlet property="searchBar" destination="LnV-Wb-blV" id="pS7-fl-xMU"/>
                         <segue destination="DWW-WP-2nM" kind="show" identifier="segueToAlbumDetail" id="ZZ6-qg-k03"/>
                     </connections>
                 </viewController>
@@ -706,6 +723,9 @@
                                     <constraint firstItem="Q7f-L0-Bxz" firstAttribute="leading" secondItem="MPh-h7-dQA" secondAttribute="trailing" constant="8" id="nEv-wk-ZFa"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="rBu-w5-tz7">
+                                <rect key="frame" x="177" y="393" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
@@ -713,8 +733,10 @@
                             <constraint firstItem="fXa-Oy-A0o" firstAttribute="trailing" secondItem="C1F-Ac-2e5" secondAttribute="trailing" id="6lX-z2-yBB"/>
                             <constraint firstItem="fXa-Oy-A0o" firstAttribute="bottom" secondItem="C1F-Ac-2e5" secondAttribute="bottom" constant="-60" id="Nom-cF-08e"/>
                             <constraint firstItem="eFp-Z5-aox" firstAttribute="trailing" secondItem="C1F-Ac-2e5" secondAttribute="trailing" id="Psp-25-brE"/>
+                            <constraint firstItem="rBu-w5-tz7" firstAttribute="centerY" secondItem="fXa-Oy-A0o" secondAttribute="centerY" constant="100" id="YPt-e0-T7T"/>
                             <constraint firstItem="syt-lh-Qnh" firstAttribute="leading" secondItem="C1F-Ac-2e5" secondAttribute="leading" id="ZUZ-cX-7vu"/>
                             <constraint firstItem="eFp-Z5-aox" firstAttribute="leading" secondItem="C1F-Ac-2e5" secondAttribute="leading" id="a3h-Zj-Cnm"/>
+                            <constraint firstItem="rBu-w5-tz7" firstAttribute="centerX" secondItem="fXa-Oy-A0o" secondAttribute="centerX" id="aD4-Ka-zGh"/>
                             <constraint firstItem="syt-lh-Qnh" firstAttribute="trailing" secondItem="C1F-Ac-2e5" secondAttribute="trailing" id="bzb-g2-p5x"/>
                             <constraint firstItem="fXa-Oy-A0o" firstAttribute="leading" secondItem="C1F-Ac-2e5" secondAttribute="leading" id="jsY-oA-cAc"/>
                             <constraint firstItem="fXa-Oy-A0o" firstAttribute="top" secondItem="CWz-mB-c7j" secondAttribute="top" id="kZT-By-PwM"/>
@@ -724,6 +746,7 @@
                     </view>
                     <connections>
                         <outlet property="TopConstraintTableView" destination="kZT-By-PwM" id="UrG-dc-xqs"/>
+                        <outlet property="activityIndicator" destination="rBu-w5-tz7" id="y1f-k6-K4l"/>
                         <outlet property="btnPlay" destination="sdt-v9-EBI" id="oCi-CN-lLn"/>
                         <outlet property="imgAlbum" destination="Scf-9o-MJP" id="Uv8-AP-js1"/>
                         <outlet property="lblSubtitleAlbum" destination="Q7f-L0-Bxz" id="3hh-t0-Lh2"/>

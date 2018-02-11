@@ -37,6 +37,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var lblTitleAlbum: UILabel!
     @IBOutlet weak var TopConstraintTableView: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     lazy var imageDownloadTasks:[String:URLSessionTask] = [:]
     
@@ -58,36 +59,38 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         downloadAlbumDetail()
     }
-    
-    @objc func nowPlayingUpdated() {
-        guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
-            return
-        }
 
-        if AudioPlayer.shared.isPlaying{
-            self.btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
-        }else{
-            self.btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
-        }
-        
-        guard let tracks = album.tracks else{
-            return
-        }
-        
-        for (i,item) in tracks.enumerated() {
-            if nowPlaying.trackId == item.trackId {
-                
-                // select update
-                let indexPath = IndexPath(row: i, section: 0)
-                if let cell = tableView.cellForRow(at: indexPath){
-                    tableView.reloadRows(at: [indexPath], with: .none)
+    @objc func nowPlayingUpdated() {
+        DispatchQueue.main.async {
+            guard let nowPlaying = AudioPlayer.shared.getNowPlaying() else {
+                return
+            }
+            
+            if AudioPlayer.shared.isPlaying{
+                self.btnPlay.setImage(UIImage(named:"iconPause"), for: .normal)
+            }else{
+                self.btnPlay.setImage(UIImage(named:"iconPlay"), for: .normal)
+            }
+            
+            guard let tracks = self.album.tracks else{
+                return
+            }
+            
+            for (i,item) in tracks.enumerated() {
+                if nowPlaying.trackId == item.trackId {
+                    
+                    // select update
+                    let indexPath = IndexPath(row: i, section: 0)
+                    if self.tableView.cellForRow(at: indexPath) != nil{
+                        self.tableView.reloadRows(at: [indexPath], with: .none)
+                    }
                 }
             }
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
     
     @IBAction func btnNavBackTapped(_ sender: Any) {
@@ -100,8 +103,15 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return
         }
         
+        self.activityIndicator.startAnimating()
+        self.activityIndicator.isHidden = false
+        
         ApiCaller().getDataFromUrl(url: url) { (data, resp, err) in
             DispatchQueue.main.async {
+                
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
+                
                 self.album.tracks = AlbumDataParser().parseAlbum(data: data, resp: resp, err: err)
                 self.tableView.reloadData()
             }
@@ -129,11 +139,13 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func btnPlayAlbumTapped(_ sender: Any) {
         
         if let nowPlaying = AudioPlayer.shared.getNowPlaying(), album.name == nowPlaying.collectionName{
-            if AudioPlayer.shared.isPlaying {
-                AudioPlayer.shared.pause()
-            }else{
-                AudioPlayer.shared.play()
-            }
+            AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+                if AudioPlayer.shared.isPlaying {
+                    AudioPlayer.shared.pause()
+                }else{
+                    AudioPlayer.shared.play()
+                }
+            })
         }else{
             // if it does not have any items playing then play first item in the album
             // // emulate deselectRow
@@ -172,7 +184,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.imageDownloadTasks[track.artworkUrl100] == downloadTask
             }
             
-            if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+            if let nowPlaying = AudioPlayer.shared.playListManager.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 cell.btnPlay.setImage(UIImage(named:"iconPauseGreen"), for: .normal)
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             }else{
@@ -210,16 +222,19 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func handleAudioActionForCell(cell:TrackTableViewCell,playIndex:Int) {
-        guard let tracks = album.tracks, tracks.count > 0 else {
-            return
-        }
-        let track = tracks[playIndex]
-        
-        if let nowPlaying = AudioPlayer.shared.playerMetaData.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
+        AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+            guard let tracks = self.album.tracks, tracks.count > 0 else {
+                return
+            }
+            
+            let track = tracks[playIndex]
+            
+            if let nowPlaying = AudioPlayer.shared.playListManager.getCurrentTrack(), track.trackId == nowPlaying.trackId, AudioPlayer.shared.isPlaying == true {
                 AudioPlayer.shared.pause()
-        }else{
-            AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
-        }
+            }else{
+                AudioPlayer.shared.setPlaylist(newPlayList: tracks, playIndex: playIndex)
+            }
+        })
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
