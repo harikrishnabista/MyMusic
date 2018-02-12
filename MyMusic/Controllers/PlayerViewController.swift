@@ -97,6 +97,14 @@ class PlayerViewController: UIViewController {
         }
     }
     
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            AudioPlayer.shared.runInBackground(workItem: DispatchWorkItem{
+                AudioPlayer.shared.shuffle()
+            })
+        }
+    }
+    
     @objc func nowPlayingSeekTimeUpdated() {
         DispatchQueue.main.async {
             if self.slider.isTracking  {

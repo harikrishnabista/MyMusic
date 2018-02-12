@@ -8,15 +8,27 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UIPageViewControllerDataSource {
+class HomeViewController: UIViewController, UIPageViewControllerDataSource, SlidePanelCallBack {
     
     var pageViewController: UIPageViewController?
     @IBOutlet weak var segControl: UISegmentedControl!
     
     var albumCollection:AlbumCollection?
     
+    //required delegate method for SlidePanelCallBack
+    func SlidePanelJustHidden() {
+        print("just hidden")
+    }
+    
+    var menuView:MenuView!
+//    var menuView: MenuView = {
+//        return MenuView(delegate: self)
+//    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.menuView = MenuView(delegate: self)
         
         // prepare pageViewcontrolelr
         self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -52,6 +64,11 @@ class HomeViewController: UIViewController, UIPageViewControllerDataSource {
         super.didReceiveMemoryWarning()
         print("Memory warning triggered !!!")
     }
+    
+    @IBAction func btnMenuTapped(_ sender: Any) {
+        menuView.ShowSlidePanel(direction: .left, offsetPercentage: 30, animated: true)
+    }
+    
     @IBAction func segControlValueChanged(_ sender: Any) {
         if self.segControl.selectedSegmentIndex == 0 {
             // open mymusic view controller

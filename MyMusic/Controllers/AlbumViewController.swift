@@ -13,6 +13,11 @@ class FakeView: UIView {
 }
 
 class PassThroughTableView: UITableView {
+    
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?{
+//        return UIView()
+//    }
+    
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         // logic is to check if this point is inside fakeview or not
         // if yes pass the event through the event so that underneath UI element can receive the event
@@ -76,6 +81,15 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return
             }
             
+            // if it does not have any items playing then play first item in the album
+            // // emulate deselectRow
+            if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+                if let prevSelCell = self.tableView.cellForRow(at: selectedIndexPath) as? TrackTableViewCell {
+                    prevSelCell.btnPlay.setImage(UIImage(named:"iconPlayGreen"), for: .normal)
+                }
+                self.tableView.deselectRow(at: selectedIndexPath, animated: false)
+            }
+            
             for (i,item) in tracks.enumerated() {
                 if nowPlaying.trackId == item.trackId {
                     
@@ -88,10 +102,7 @@ class AlbumViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
-    }
+
     
     @IBAction func btnNavBackTapped(_ sender: Any) {
         self.navigationController?.navigationBar.isHidden = false

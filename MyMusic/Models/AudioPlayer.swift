@@ -23,7 +23,18 @@ extension AVPlayer {
     }
 }
 
-class AudioPlayer {
+protocol AudioPlayerProtocol {
+    func updateSeekTime(seekTime:Float)
+    func prepareToPlay(track:Track)
+    func play()
+    func pause()
+    func playNext()
+    func playPrev()
+    func stop()
+    func shuffle()
+}
+
+class AudioPlayer: AudioPlayerProtocol {
     
     func runInBackground(workItem:DispatchWorkItem) {
         let queue = DispatchQueue(label: "com.meroapp.mymusic.audioplayer", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
@@ -31,8 +42,6 @@ class AudioPlayer {
         queue.async(execute: workItem)
     }
     
-//    var delegate:AudioPlayerMetaUpdatable?
-
     public static var shared = AudioPlayer()
     var playListManager:PlayListManager = PlayListManager()
     var avPlayer:AVPlayer = AVPlayer()
@@ -262,6 +271,7 @@ class PlayListManager {
             playIndex = playIndex + 1
             return playList[playIndex]
         }else{
+            // if this is last track go to beginning
             playIndex = 0
             return playList[playIndex]
         }
@@ -277,6 +287,7 @@ class PlayListManager {
             playIndex = playIndex - 1
             return playList[playIndex]
         }else{
+            // if this is last track go to last track
             playIndex = playList.count - 1
             return playList[playIndex]
         }
@@ -295,6 +306,15 @@ class PlayListManager {
     }
     
     func shuffle() {
+
+        guard playList.count > 1 else {
+            return
+        }
+        
+        // shuffle algorithm explanation
+        // append to shuffled array one by one selecting random track
+        // this way it prevents achieving same result as original sequence
+        
         var shuffled:[Track] = []
         
         while(self.playList.count > 2){
@@ -308,20 +328,13 @@ class PlayListManager {
             shuffled.append(playList.remove(at: 0))
         }
         
+        // for last two elements swap only
         shuffled.append(playList.removeLast())
         shuffled.append(playList.removeLast())
-        
-        // for lastTwo items
-        // swap between random index and last index
-        
-//        let randomIndex = 1
-//        let firstTrack = playList[0]
-//        playList[0] = playList[randomIndex]
-//        playList[randomIndex] = firstTrack
-        
+
         playList = shuffled
         
-
+        // after shuffling choose first element as playIndex
         playIndex = 0
     }
 }

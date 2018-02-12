@@ -24,6 +24,9 @@
                         <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" image="iconMenu" id="aZg-Ou-8es">
                             <color key="tintColor" red="0.0" green="0.70229517490000004" blue="0.1013623592" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="btnMenuTapped:" destination="BYZ-38-t0r" id="zRA-nz-DeU"/>
+                            </connections>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="DmQ-ZV-xlP">
                             <rect key="frame" x="115" y="7" width="145" height="30"/>
