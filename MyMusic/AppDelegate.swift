@@ -20,8 +20,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 //        27ae60
         
+
+        
+        // MPNowPlayingInfoCenter
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        // Activate audioSession
+//        do {
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        } catch {
+//            print("audioSession could not be activated")
+//        }
+        
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .defaultToSpeaker)
             print("Playback OK")
             try AVAudioSession.sharedInstance().setActive(true)
             print("Session is Active")
@@ -53,7 +65,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    // MARK: - Remote Controls
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        
+        guard let event = event, event.type == UIEventType.remoteControl else { return }
+        
+        switch event.subtype {
+        case .remoteControlPlay:
+            AudioPlayer.shared.play()
+        case .remoteControlPause:
+            AudioPlayer.shared.pause()
+        case .remoteControlTogglePlayPause:
+            AudioPlayer.shared.shuffle()
+        case .remoteControlNextTrack:
+            AudioPlayer.shared.playNext()
+        case .remoteControlPreviousTrack:
+            AudioPlayer.shared.playPrev()
+        default:
+            break
+        }
+    }
 }
 

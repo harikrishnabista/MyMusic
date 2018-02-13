@@ -44,6 +44,7 @@
 		56D9349F202982E500D10A94 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D9349E202982E500D10A94 /* User.swift */; };
 		56D934A1202A53B200D10A94 /* RecentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */; };
 		56D934A3202A545100D10A94 /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D934A2202A545100D10A94 /* RecentTableViewCell.swift */; };
+		56E2D14820322C2A0002AA5E /* PlayListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E2D14720322C2A0002AA5E /* PlayListManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		56D9349E202982E500D10A94 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		56D934A0202A53B200D10A94 /* RecentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCollectionViewCell.swift; sourceTree = "<group>"; };
 		56D934A2202A545100D10A94 /* RecentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTableViewCell.swift; sourceTree = "<group>"; };
+		56E2D14720322C2A0002AA5E /* PlayListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,8 @@
 		56D934272027AC4C00D10A94 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				56D934372027ADAB00D10A94 /* AudioPlayer.swift */,
+				56E2D14720322C2A0002AA5E /* PlayListManager.swift */,
 				56D934412027B79C00D10A94 /* ApiCaller.swift */,
 				56D9343F2027B79C00D10A94 /* Constants.swift */,
 				56D934422027B79C00D10A94 /* Extensions.swift */,
@@ -146,7 +150,6 @@
 			isa = PBXGroup;
 			children = (
 				56D934332027AD9000D10A94 /* Track.swift */,
-				56D934372027ADAB00D10A94 /* AudioPlayer.swift */,
 				56D934392027ADDB00D10A94 /* MyMusic.swift */,
 				56D9343B2027ADF500D10A94 /* RecentlyPlayed.swift */,
 				56D934352027ADA000D10A94 /* Album.swift */,
@@ -309,6 +312,7 @@
 				56D9345220280C4100D10A94 /* BrowseItemCollectionViewCell.swift in Sources */,
 				56D934432027B79C00D10A94 /* Constants.swift in Sources */,
 				56D934A1202A53B200D10A94 /* RecentCollectionViewCell.swift in Sources */,
+				56E2D14820322C2A0002AA5E /* PlayListManager.swift in Sources */,
 				56D934482027BA5D00D10A94 /* MyMusicTableViewCell.swift in Sources */,
 				56D9345D2028406900D10A94 /* TrackTableViewCell.swift in Sources */,
 			);

@@ -19,6 +19,6 @@ class User: NSObject {
     var myMusic = MyMusic()
     
     private override init(){
-        // as soon as it starts playing add to recently playlist
+        
     }
 }
